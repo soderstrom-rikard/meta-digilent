@@ -1,5 +1,5 @@
-require ../meta/packages/uboot/u-boot.inc
-PR = "r0"
+require ../meta/recipes-bsp/uboot/u-boot.inc
+PR = "r1"
 
 # Prefered u-boot from mainstream since has generic support for
 # ppc405, ppc440
