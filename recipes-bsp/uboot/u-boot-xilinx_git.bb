@@ -1,5 +1,5 @@
-require ../meta/recipes-bsp/uboot/u-boot.inc
-PR = "r5"
+require recipes-bsp/uboot/u-boot.inc
+PR = "r6"
 THISDIR := "${@os.path.dirname(bb.data.getVar('FILE', d, True))}"
 FILESPATH =. "${@base_set_filespath(["${THISDIR}/files"], d)}:"
 
