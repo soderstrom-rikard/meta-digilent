@@ -71,6 +71,31 @@ else
 fi
 }
 
+do_mk_xparam() {
+oenote "Replacing xparameters.mk configuration file"
+if [ "${TARGET_ARCH}" == "powerpc" ]; then
+	xparam="${XILINX_BSP_PATH}/ppc${TARGET_CPU}_0/include/xparameters.h"
+
+    if grep -qoe XPAR_IIC_0_DEVICE_ID ${xparam}; then
+        echo -e "XPAR_IIC        := y" > ${S}/board/xilinx/${UBOOT_TARGET}/xparameters.mk
+    else
+        echo -e "XPAR_IIC        := n" > ${S}/board/xilinx/${UBOOT_TARGET}/xparameters.mk
+    fi
+
+    if grep -qoe XPAR_LLTEMAC_0_DEVICE_ID ${xparam}; then
+        echo -e "XPAR_LLTEMAC    := y" >> ${S}/board/xilinx/${UBOOT_TARGET}/xparameters.mk
+    else
+        echo -e "XPAR_LLTEMAC    := n" >> ${S}/board/xilinx/${UBOOT_TARGET}/xparameters.mk
+    fi
+
+    if grep -qoe XPAR_SYSACE_0_DEVICE_ID ${xparam}; then
+        echo -e "XPAR_SYSACE     := y" >> ${S}/board/xilinx/${UBOOT_TARGET}/xparameters.mk
+    else
+        echo -e "XPAR_SYSACE     := n" >> ${S}/board/xilinx/${UBOOT_TARGET}/xparameters.mk
+    fi
+fi
+}
+
 do_configure_prepend() {
 #first check that the XILINX_BSP_PATH and XILINX_BOARD have been defined in local.conf
 #now depending on the board type and arch do what is nessesary
@@ -78,6 +103,7 @@ if [ -n "${XILINX_BSP_PATH}" ]; then
 	if [ -n "${XILINX_BOARD}" ]; then
         if [ -d "${S}/board/xilinx" ]; then
             do_export_xparam
+            do_mk_xparam
         fi
 	else
 		oefatal "XILINX_BOARD not defined ! Exit"
