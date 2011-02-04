@@ -24,10 +24,12 @@ def uboot_machine(a, d):
     if re.match('powerpc', a):
         if board == 'ml507':
             return 'ml507_config'
+        elif board == 'ml405':
+            return 'ml405_config'
         else:
             return 'xilinx-ppc' + target + '-generic_config'
     else:
-        return 'microblaze-generic_config'
+        return target + '-generic_config'
 
 def uboot_target(a, d):
     import re
@@ -37,6 +39,8 @@ def uboot_target(a, d):
     if re.match('powerpc', a):
         if board == 'ml507':
             return 'ml507'
+        elif board == 'ml405':
+            return 'ml405'
         else:
             return 'ppc' + target
     else:
