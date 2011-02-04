@@ -7,9 +7,12 @@ DEFAULT_PREFERENCE = "-1"
 DEFAULT_PREFERENCE_virtex4 = "1"
 DEFAULT_PREFERENCE_virtex5 = "1"
 
+LICENSE = "GPL"
+LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
+
 TAG="xilinx_v2.6.37-rc4"
 PV = "2.6.37.4"
-PR = "r4"
+PR = "r5"
 
 SRCREV = "${TAG}"
 SRC_URI = "git://git.xilinx.com/linux-2.6-xlnx.git;protocol=git \
