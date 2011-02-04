@@ -1,12 +1,12 @@
 require ../meta/recipes-bsp/uboot/u-boot.inc
-PR = "r1"
+PR = "r2"
 
-# Prefered u-boot from mainstream since has generic support for
-# ppc405, ppc440
-SRC_URI = "git://git.xilinx.com/u-boot-xlnx.git;protocol=git"
-SRCREV = "26e999650cf77c16f33c580abaadab2532f5e8b2"
+BRANCH="master"
+TAG="e094f2479ea339d7f48b6826f06f0be4984d9a98"
+SRC_URI = "git://git.xilinx.com/u-boot-xlnx.git;branch=${BRANCH};protocol=git"
+SRCREV = "${TAG}"
 
-inherit xilinx-bsp
+inherit xilinx-boot
 
 TARGET_BOARD = "${@map_target(bb.data.getVar('TARGET_ARCH', d, 1), d)}"
 UBOOT_TARGET = "${@uboot_target(bb.data.getVar('TARGET_ARCH', d, 1), d)}"
