@@ -7,13 +7,12 @@ DEFAULT_PREFERENCE = "-1"
 DEFAULT_PREFERENCE_virtex4 = "1"
 DEFAULT_PREFERENCE_virtex5 = "1"
 
-TAG="xilinx_v2.6.35"
-PV = "2.6.35+git"
-PR = "r2"
+TAG="xilinx_v2.6.37-rc4"
+PV = "2.6.37.4"
+PR = "r3"
 
 SRCREV = "${TAG}"
 SRC_URI = "git://git.xilinx.com/linux-2.6-xlnx.git;protocol=git \
-           file://xilinxfb-update-tft-comp.patch \
            file://linux-xilinx-do-not-use-OS-option.patch \
 		   file://defconfig"
 
