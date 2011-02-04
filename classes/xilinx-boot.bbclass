@@ -46,34 +46,39 @@ def uboot_target(a, d):
     else:
         return target
 
-do_configure_prepend() {
-#first check that the XILINX_BSP_PATH and XILINX_BOARD have been defined in local.conf
-#now depending on the board type and arch do what is nessesary
-if [ -n "${XILINX_BSP_PATH}" ]; then
-	if [ -n "${XILINX_BOARD}" ]; then
-		if [ -d "${S}/board/xilinx" ]; then
-			oenote "Replacing xparameters header to match hardware model"
-			if [ "${TARGET_ARCH}" == "powerpc" ]; then
-				xparam="${XILINX_BSP_PATH}/ppc${TARGET_CPU}_0/include/xparameters.h"
-				cpu="PPC`echo ${TARGET_CPU} | tr '[:lower:]' '[:upper:]'`"
-			else
-				xparam="${XILINX_BSP_PATH}/${TARGET_CPU}_0/include/xparameters.h"
-				cpu=`echo ${TARGET_CPU} | tr '[:lower:]' '[:upper:]'`
-			fi
-			if [ -e "$xparam" ]; then
-				cp ${xparam} ${S}/board/xilinx/${UBOOT_TARGET}
-				echo "/*** Cannonical definitions ***/
+
+do_export_xparam() {
+oenote "Replacing xparameters header to match hardware model"
+if [ "${TARGET_ARCH}" == "powerpc" ]; then
+	xparam="${XILINX_BSP_PATH}/ppc${TARGET_CPU}_0/include/xparameters.h"
+	cpu="PPC`echo ${TARGET_CPU} | tr '[:lower:]' '[:upper:]'`"
+else
+	xparam="${XILINX_BSP_PATH}/${TARGET_CPU}_0/include/xparameters.h"
+	cpu=`echo ${TARGET_CPU} | tr '[:lower:]' '[:upper:]'`
+fi
+if [ -e "$xparam" ]; then
+	cp ${xparam} ${S}/board/xilinx/${UBOOT_TARGET}
+	echo "/*** Cannonical definitions ***/
 #define XPAR_PLB_CLOCK_FREQ_HZ XPAR_PROC_BUS_0_FREQ_HZ
 #define XPAR_CORE_CLOCK_FREQ_HZ XPAR_CPU_${cpu}_CORE_CLOCK_FREQ_HZ
 #ifndef XPAR_DDR2_SDRAM_MEM_BASEADDR
 # define XPAR_DDR2_SDRAM_MEM_BASEADDR XPAR_DDR_SDRAM_MPMC_BASEADDR
 #endif
 #define XPAR_PCI_0_CLOCK_FREQ_HZ    0" >> ${S}/board/xilinx/${UBOOT_TARGET}/xparameters.h
-			else
-				oefatal "No xparameters header file found, missing hardware ref design?"
-                exit 1
-			fi
-		fi
+else
+    oefatal "No xparameters header file found, missing hardware ref design?"
+    exit 1
+fi
+}
+
+do_configure_prepend() {
+#first check that the XILINX_BSP_PATH and XILINX_BOARD have been defined in local.conf
+#now depending on the board type and arch do what is nessesary
+if [ -n "${XILINX_BSP_PATH}" ]; then
+	if [ -n "${XILINX_BOARD}" ]; then
+        if [ -d "${S}/board/xilinx" ]; then
+            do_export_xparam
+        fi
 	else
 		oefatal "XILINX_BOARD not defined ! Exit"
 		exit 1
