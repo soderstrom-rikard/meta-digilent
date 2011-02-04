@@ -1,10 +1,15 @@
 require ../meta/recipes-bsp/uboot/u-boot.inc
-PR = "r3"
+PR = "r4"
+THISDIR := "${@os.path.dirname(bb.data.getVar('FILE', d, True))}"
+FILESPATH =. "${@base_set_filespath(["${THISDIR}/files"], d)}:"
 
 EXTRA_OEMAKE = "CROSS_COMPILE=${TARGET_PREFIX} OPTFLAGS='-O2'"
 BRANCH="master"
 TAG="e094f2479ea339d7f48b6826f06f0be4984d9a98"
 SRC_URI = "git://git.xilinx.com/u-boot-xlnx.git;branch=${BRANCH};protocol=git \
+           file://uboot-remove-inline-qualifier-from-show_boot_progres.patch \
+           file://ml405-add-uartlite-config-options.patch \
+           file://ml405-replace-hardcode-macros-for-uartns550.patch \
           "
 SRCREV = "${TAG}"
 
