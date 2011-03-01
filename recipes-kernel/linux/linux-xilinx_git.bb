@@ -1,4 +1,4 @@
-require recipes-kernel/linux/linux.inc
+require linux.inc
 
 DESCRIPTION = "Linux kernel for Xilinx platforms"
 
@@ -10,9 +10,9 @@ DEFAULT_PREFERENCE_virtex5 = "1"
 LICENSE = "GPL"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 
-TAG="xilinx_v2.6.37-rc4"
-PV = "2.6.37.4"
-PR = "r5"
+TAG="xilinx_v2.6.37"
+PV = "2.6.37"
+PR = "r6"
 
 SRCREV = "${TAG}"
 SRC_URI = "git://git.xilinx.com/linux-2.6-xlnx.git;protocol=git \
