@@ -5,18 +5,9 @@ LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 
 inherit kernel
-require linux-dtb.inc
-
-DEPENDS_append_em-x270 = " mtd-utils "
+require recipes-kernel/linux/linux-dtb.inc
 
 RPSRC = "http://www.rpsys.net/openzaurus/patches/archive"
-
-# Specify the commandline for your device
-
-#boot from mmc
-CMDLINE_at91sam9263ek = "mem=64M console=ttyS0,115200 root=/dev/mmcblk0p1 rootfstype=ext2 rootdelay=5"
-#boot from nfs
-#CMDLINE_at91sam9263ek = "mem=64M console=ttyS0,115200 root=301 root=/dev/nfs nfsroot=172.20.3.1:/data/at91 ip=172.20.0.5:::255.255.0.0"
 
 do_configure_prepend() {
         echo "" > ${S}/.config
