@@ -14,6 +14,8 @@
 #Currently tested on
 #Xilinx ML405
 #Xilinx ML507
+#Xilinx ML403 configured as ML405 same processor core only changes FPGA density
+#Xilinx ML510 configured as ML507
 #More to come soon ;)
 
 def uboot_machine(a, d):
@@ -22,9 +24,9 @@ def uboot_machine(a, d):
     board = bb.data.getVar('XILINX_BOARD', d, 1)
     target = bb.data.getVar('TARGET_CPU', d, 1)
     if re.match('powerpc', a):
-        if board == 'ml507':
+        if board == 'ml507' or board == 'ml510':
             return 'ml507_config'
-        elif board == 'ml405':
+        elif board == 'ml405' or board == 'ml403':
             return 'ml405_config'
         else:
             return 'xilinx-ppc' + target + '-generic_config'
@@ -37,9 +39,9 @@ def uboot_target(a, d):
     board = bb.data.getVar('XILINX_BOARD', d, 1)
     target = bb.data.getVar('TARGET_CPU', d, 1) + '-generic'
     if re.match('powerpc', a):
-        if board == 'ml507':
+        if board == 'ml507' or board == 'ml510':
             return 'ml507'
-        elif board == 'ml405':
+        elif board == 'ml405' or board == 'ml403':
             return 'ml405'
         else:
             return 'ppc' + target
