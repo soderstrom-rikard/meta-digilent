@@ -48,36 +48,42 @@ def uboot_target(a, d):
     else:
         return target
 
+# Find xparameters.h header in hardware project
+find_xparam() {
+# Search for xparameter header
+headers=`find ${XILINX_BSP_PATH} -path "*/include/xparameters.h" -print`
+# trim if multiple version are found
+param=`echo ${headers} | cut -d ' ' -f1`
+
+if [ -e "$param" ]; then
+	echo "$param"
+else
+	echo "0"
+fi
+}
 
 do_export_xparam() {
 oenote "Replacing xparameters header to match hardware model"
+xparam=$1
 if [ "${TARGET_ARCH}" == "powerpc" ]; then
-	xparam="${XILINX_BSP_PATH}/ppc${TARGET_CPU}_0/include/xparameters.h"
 	cpu="PPC`echo ${TARGET_CPU} | tr '[:lower:]' '[:upper:]'`"
 else
-	xparam="${XILINX_BSP_PATH}/${TARGET_CPU}_0/include/xparameters.h"
 	cpu=`echo ${TARGET_CPU} | tr '[:lower:]' '[:upper:]'`
 fi
-if [ -e "$xparam" ]; then
-	cp ${xparam} ${S}/board/xilinx/${UBOOT_TARGET}
-	echo "/*** Cannonical definitions ***/
+cp ${xparam} ${S}/board/xilinx/${UBOOT_TARGET}
+echo "/*** Cannonical definitions ***/
 #define XPAR_PLB_CLOCK_FREQ_HZ XPAR_PROC_BUS_0_FREQ_HZ
 #define XPAR_CORE_CLOCK_FREQ_HZ XPAR_CPU_${cpu}_CORE_CLOCK_FREQ_HZ
 #ifndef XPAR_DDR2_SDRAM_MEM_BASEADDR
 # define XPAR_DDR2_SDRAM_MEM_BASEADDR XPAR_DDR_SDRAM_MPMC_BASEADDR
 #endif
 #define XPAR_PCI_0_CLOCK_FREQ_HZ    0" >> ${S}/board/xilinx/${UBOOT_TARGET}/xparameters.h
-else
-    oefatal "No xparameters header file found, missing hardware ref design?"
-    exit 1
-fi
 }
 
 do_mk_xparam() {
 oenote "Replacing xparameters.mk configuration file"
+xparam=$1
 if [ "${TARGET_ARCH}" == "powerpc" ]; then
-	xparam="${XILINX_BSP_PATH}/ppc${TARGET_CPU}_0/include/xparameters.h"
-
     if grep -qoe XPAR_IIC_0_DEVICE_ID ${xparam}; then
         echo -e "XPAR_IIC        := y" > ${S}/board/xilinx/${UBOOT_TARGET}/xparameters.mk
     else
@@ -145,8 +151,14 @@ do_configure_prepend() {
 if [ -n "${XILINX_BSP_PATH}" ]; then
 	if [ -n "${XILINX_BOARD}" ]; then
         if [ -d "${S}/board/xilinx" ]; then
-            do_export_xparam
-            do_mk_xparam
+			xparam=$(find_xparam)
+			if [ "$xparam" != "0" ]; then
+				do_export_xparam $xparam
+				do_mk_xparam $xparam
+			else
+				oefatal "No xparameters header file found, missing Xilinx SDK project"
+				exit 1
+			fi
         fi
 	else
 		oefatal "XILINX_BOARD not defined ! Exit"
