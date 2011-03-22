@@ -141,8 +141,15 @@ if [ ! -f implementation/download.bit ]; then
 	# Bitstream not found generate it
 	make -f ${XILINX_BSP_PATH}/system.make init_bram
 fi
-xmd -tcl genace.tcl -hw implementation/download.bit -elf u-boot \
--ace u-boot-${XILINX_BOARD}.ace -board ${XILINX_BOARD}
+
+if [ "${TARGET_ARCH}" == "powerpc" ]; then
+	# Find u-boot start address
+	start_address=`${TARGET_PREFIX}objdump -x u-boot | grep -w "start address" | cut -d ' ' -f3`
+	# Generate ACE image
+	xmd -tcl genace.tcl -hw implementation/download.bit -elf u-boot \
+	-target ppc_hw -start_address ${start_address} -ace u-boot-${XILINX_BOARD}.ace \
+	-board ${XILINX_BOARD}
+fi
 }
 
 do_configure_prepend() {
