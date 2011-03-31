@@ -1,5 +1,5 @@
 require recipes-bsp/uboot/u-boot.inc
-PR = "r8"
+PR = "r9"
 THISDIR := "${@os.path.dirname(bb.data.getVar('FILE', d, True))}"
 FILESPATH =. "${@base_set_filespath(["${THISDIR}/files"], d)}:"
 LICENSE = "GPLv2+"
@@ -18,10 +18,8 @@ SRC_URI = "git://git.xilinx.com/u-boot-xlnx.git;branch=${BRANCH};protocol=git \
           "
 SRCREV = "${TAG}"
 
-inherit xilinx-boot
+inherit xilinx-boot xilinx-utils
 
-TARGET_BOARD = "${@map_target(bb.data.getVar('TARGET_ARCH', d, 1), d)}"
-UBOOT_TARGET = "${@uboot_target(bb.data.getVar('TARGET_ARCH', d, 1), d)}"
-export UBOOT_MACHINE = "${@uboot_machine(bb.data.getVar('TARGET_ARCH', d, 1), d)}"
+XILINX_BOARD = "${@find_board(bb.data.getVar('XILINX_BSP_PATH', d, 1), d)}"
 
 S = "${WORKDIR}/git"
