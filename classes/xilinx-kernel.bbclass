@@ -16,15 +16,23 @@
 #Xilinx ML507
 #More to come soon ;)
 
-def map_target(a, d):
-	import re
-	board = bb.data.getVar('XILINX_BOARD', d, 1)
-	cpu = bb.data.getVar('TARGET_CPU', d, 1)
+def device_tree(a, d):
+    # Device tree helper function
+    import re
 
-	if re.match('powerpc', a):
-		return cpu + '-' + board
-	else:
-		return 'system'
+    board = bb.data.getVar('XILINX_BOARD', d, 1)
+    cpu = bb.data.getVar('TARGET_CPU', d, 1)
+
+    if re.match('powerpc', a):
+        target = cpu + '-' + board
+        dts = 'arch/' + a + '/boot/dts/virtex' + target + '.dts'
+    else:
+        target = 'system'
+        dts = 'arch/' + a + '/boot/dts/' + target + '.dts'
+
+    bb.data.setVar('KERNEL_TARGET', target, d)
+
+    return dts
 
 
 do_configure_prepend() {
@@ -37,9 +45,9 @@ if [ -n "${XILINX_BSP_PATH}" ]; then
 			if [ -e "$dts" ]; then
 				oenote "Replacing device tree to match hardware model"
 				if [ "${TARGET_ARCH}" == "powerpc" ]; then
-					cp -pP ${dts} ${S}/arch/powerpc/boot/dts/virtex${TARGET_BOARD}.dts
+					cp -pP ${dts} ${S}/arch/powerpc/boot/dts/virtex${KERNEL_TARGET}.dts
 				else
-					cp -pP ${dts} ${S}/arch/microblaze/platform/generic/${TARGET_BOARD}.dts
+					cp -pP ${dts} ${S}/arch/microblaze/platform/generic/${KERNEL_TARGET}.dts
 				fi
 			else
 				oefatal "No device tree found, missing hardware ref design?"
