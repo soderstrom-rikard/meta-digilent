@@ -18,35 +18,31 @@
 #Xilinx ML510 configured as ML507
 #More to come soon ;)
 
-def uboot_machine(a, d):
+python __anonymous () {
     import re
 
+    arch = bb.data.getVar('TARGET_ARCH', d, 1)
     board = bb.data.getVar('XILINX_BOARD', d, 1)
-    target = bb.data.getVar('TARGET_CPU', d, 1)
-    if re.match('powerpc', a):
-        if board == 'ml507' or board == 'ml510':
-            return 'ml507_config'
-        elif board == 'ml405' or board == 'ml403':
-            return 'ml405_config'
-        else:
-            return 'xilinx-ppc' + target + '-generic_config'
-    else:
-        return target + '-generic_config'
+    cpu = bb.data.getVar('TARGET_CPU', d, 1)
+    target = cpu + '-generic'
 
-def uboot_target(a, d):
-    import re
-
-    board = bb.data.getVar('XILINX_BOARD', d, 1)
-    target = bb.data.getVar('TARGET_CPU', d, 1) + '-generic'
-    if re.match('powerpc', a):
-        if board == 'ml507' or board == 'ml510':
-            return 'ml507'
-        elif board == 'ml405' or board == 'ml403':
-            return 'ml405'
+    if re.match('powerpc', arch):
+        if board in ['ml507', 'ml510']:
+            uboot_target = 'ml507'
+            uboot_config = 'ml507_config'
+        elif board in ['ml403', 'ml405']:
+            uboot_target = 'ml405'
+            uboot_config = 'ml405_config'
         else:
-            return 'ppc' + target
+            uboot_target = 'pcc' + target
+            uboot_config = 'xilinx-pcc' + cpu + '-generic_config'
     else:
-        return target
+        uboot_taget = target
+        uboot_config = arch + '-generic_config'
+
+    bb.data.setVar('UBOOT_TARGET', uboot_target, d)
+    bb.data.setVar('UBOOT_MACHINE', uboot_config, d)
+}
 
 # Find xparameters.h header in hardware project
 find_xparam() {
