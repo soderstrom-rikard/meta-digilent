@@ -18,66 +18,68 @@
 #Xilinx ML510 configured as ML507
 #More to come soon ;)
 
-def uboot_machine(a, d):
+python __anonymous () {
     import re
 
+    arch = bb.data.getVar('TARGET_ARCH', d, 1)
     board = bb.data.getVar('XILINX_BOARD', d, 1)
-    target = bb.data.getVar('TARGET_CPU', d, 1)
-    if re.match('powerpc', a):
-        if board == 'ml507' or board == 'ml510':
-            return 'ml507_config'
-        elif board == 'ml405' or board == 'ml403':
-            return 'ml405_config'
+    cpu = bb.data.getVar('TARGET_CPU', d, 1)
+    target = cpu + '-generic'
+
+    if re.match('powerpc', arch):
+        if board in ['ml507', 'ml510']:
+            uboot_target = 'ml507'
+            uboot_config = 'ml507_config'
+        elif board in ['ml403', 'ml405']:
+            uboot_target = 'ml405'
+            uboot_config = 'ml405_config'
         else:
-            return 'xilinx-ppc' + target + '-generic_config'
+            uboot_target = 'pcc' + target
+            uboot_config = 'xilinx-pcc' + cpu + '-generic_config'
     else:
-        return target + '-generic_config'
+        uboot_taget = target
+        uboot_config = arch + '-generic_config'
 
-def uboot_target(a, d):
-    import re
+    bb.data.setVar('UBOOT_TARGET', uboot_target, d)
+    bb.data.setVar('UBOOT_MACHINE', uboot_config, d)
+}
 
-    board = bb.data.getVar('XILINX_BOARD', d, 1)
-    target = bb.data.getVar('TARGET_CPU', d, 1) + '-generic'
-    if re.match('powerpc', a):
-        if board == 'ml507' or board == 'ml510':
-            return 'ml507'
-        elif board == 'ml405' or board == 'ml403':
-            return 'ml405'
-        else:
-            return 'ppc' + target
-    else:
-        return target
+# Find xparameters.h header in hardware project
+find_xparam() {
+# Search for xparameter header
+headers=`find ${XILINX_BSP_PATH} -path "*/include/xparameters.h" -print`
+# trim if multiple version are found
+param=`echo ${headers} | cut -d ' ' -f1`
 
+if [ -e "$param" ]; then
+	echo "$param"
+else
+	echo "0"
+fi
+}
 
 do_export_xparam() {
 oenote "Replacing xparameters header to match hardware model"
+xparam=$1
 if [ "${TARGET_ARCH}" == "powerpc" ]; then
-	xparam="${XILINX_BSP_PATH}/ppc${TARGET_CPU}_0/include/xparameters.h"
 	cpu="PPC`echo ${TARGET_CPU} | tr '[:lower:]' '[:upper:]'`"
 else
-	xparam="${XILINX_BSP_PATH}/${TARGET_CPU}_0/include/xparameters.h"
 	cpu=`echo ${TARGET_CPU} | tr '[:lower:]' '[:upper:]'`
 fi
-if [ -e "$xparam" ]; then
-	cp ${xparam} ${S}/board/xilinx/${UBOOT_TARGET}
-	echo "/*** Cannonical definitions ***/
+cp ${xparam} ${S}/board/xilinx/${UBOOT_TARGET}
+echo "/*** Cannonical definitions ***/
 #define XPAR_PLB_CLOCK_FREQ_HZ XPAR_PROC_BUS_0_FREQ_HZ
 #define XPAR_CORE_CLOCK_FREQ_HZ XPAR_CPU_${cpu}_CORE_CLOCK_FREQ_HZ
 #ifndef XPAR_DDR2_SDRAM_MEM_BASEADDR
 # define XPAR_DDR2_SDRAM_MEM_BASEADDR XPAR_DDR_SDRAM_MPMC_BASEADDR
 #endif
 #define XPAR_PCI_0_CLOCK_FREQ_HZ    0" >> ${S}/board/xilinx/${UBOOT_TARGET}/xparameters.h
-else
-    oefatal "No xparameters header file found, missing hardware ref design?"
-    exit 1
-fi
 }
 
 do_mk_xparam() {
 oenote "Replacing xparameters.mk configuration file"
+xparam=$1
 if [ "${TARGET_ARCH}" == "powerpc" ]; then
-	xparam="${XILINX_BSP_PATH}/ppc${TARGET_CPU}_0/include/xparameters.h"
-
     if grep -qoe XPAR_IIC_0_DEVICE_ID ${xparam}; then
         echo -e "XPAR_IIC        := y" > ${S}/board/xilinx/${UBOOT_TARGET}/xparameters.mk
     else
@@ -135,8 +137,15 @@ if [ ! -f implementation/download.bit ]; then
 	# Bitstream not found generate it
 	make -f ${XILINX_BSP_PATH}/system.make init_bram
 fi
-xmd -tcl genace.tcl -hw implementation/download.bit -elf u-boot \
--ace u-boot-${XILINX_BOARD}.ace -board ${XILINX_BOARD}
+
+if [ "${TARGET_ARCH}" == "powerpc" ]; then
+	# Find u-boot start address
+	start_address=`${TARGET_PREFIX}objdump -x u-boot | grep -w "start address" | cut -d ' ' -f3`
+	# Generate ACE image
+	xmd -tcl genace.tcl -hw implementation/download.bit -elf u-boot \
+	-target ppc_hw -start_address ${start_address} -ace u-boot-${XILINX_BOARD}.ace \
+	-board ${XILINX_BOARD}
+fi
 }
 
 do_configure_prepend() {
@@ -145,8 +154,14 @@ do_configure_prepend() {
 if [ -n "${XILINX_BSP_PATH}" ]; then
 	if [ -n "${XILINX_BOARD}" ]; then
         if [ -d "${S}/board/xilinx" ]; then
-            do_export_xparam
-            do_mk_xparam
+			xparam=$(find_xparam)
+			if [ "$xparam" != "0" ]; then
+				do_export_xparam $xparam
+				do_mk_xparam $xparam
+			else
+				oefatal "No xparameters header file found, missing Xilinx SDK project"
+				exit 1
+			fi
         fi
 	else
 		oefatal "XILINX_BOARD not defined ! Exit"
