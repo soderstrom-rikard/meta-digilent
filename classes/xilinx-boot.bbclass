@@ -152,7 +152,7 @@ do_configure_prepend() {
 #first check that the XILINX_BSP_PATH and XILINX_BOARD have been defined in local.conf
 #now depending on the board type and arch do what is nessesary
 if [ -n "${XILINX_BSP_PATH}" ]; then
-	if [ -n "${XILINX_BOARD}" ]; then
+	if [ "${XILINX_BOARD}" != "unknown" ]; then
         if [ -d "${S}/board/xilinx" ]; then
 			xparam=$(find_xparam)
 			if [ "$xparam" != "0" ]; then
@@ -164,7 +164,8 @@ if [ -n "${XILINX_BSP_PATH}" ]; then
 			fi
         fi
 	else
-		oefatal "XILINX_BOARD not defined ! Exit"
+        oenote "Xilinx board model: ${XILINX_BOARD}"
+		oefatal "XILINX_BSP_PATH points to a valid Xilinx XPS project directory? ! Exit"
 		exit 1
 	fi
 else
@@ -177,9 +178,14 @@ do_deploy_prepend() {
 # Install u-boot elf image
 if [ -d "${XILINX_BSP_PATH}" ]; then
 	if [ -e "${S}/u-boot" ]; then
+        oenote "Deploy uboot elf image"
 		install ${S}/u-boot ${XILINX_BSP_PATH}
+    fi
+    if [ -n "${XILINX_LOC}" ]; then
 		do_mk_sysace
 		install ${XILINX_BSP_PATH}/u-boot-${XILINX_BOARD}.ace ${DEPLOYDIR}
-	fi
+    else
+        oenote "XILINX_LOC undifined can't generate system ace image"
+    fi
 fi
 }
