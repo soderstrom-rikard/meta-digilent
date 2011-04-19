@@ -178,9 +178,14 @@ do_deploy_prepend() {
 # Install u-boot elf image
 if [ -d "${XILINX_BSP_PATH}" ]; then
 	if [ -e "${S}/u-boot" ]; then
+        oenote "Deploy uboot elf image"
 		install ${S}/u-boot ${XILINX_BSP_PATH}
+    fi
+    if [ -n "${XILINX_LOC}" ]; then
 		do_mk_sysace
 		install ${XILINX_BSP_PATH}/u-boot-${XILINX_BOARD}.ace ${DEPLOYDIR}
-	fi
+    else
+        oenote "XILINX_LOC undifined can't generate system ace image"
+    fi
 fi
 }
