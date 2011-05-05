@@ -59,7 +59,7 @@ fi
 }
 
 do_export_xparam() {
-oenote "Replacing xparameters header to match hardware model"
+bbnote "Replacing xparameters header to match hardware model"
 xparam=$1
 if [ "${TARGET_ARCH}" == "powerpc" ]; then
 	cpu="PPC`echo ${TARGET_CPU} | tr '[:lower:]' '[:upper:]'`"
@@ -77,7 +77,7 @@ echo "/*** Cannonical definitions ***/
 }
 
 do_mk_xparam() {
-oenote "Replacing xparameters.mk configuration file"
+bbnote "Replacing xparameters.mk configuration file"
 xparam=$1
 if [ "${TARGET_ARCH}" == "powerpc" ]; then
     if grep -qoe XPAR_IIC_0_DEVICE_ID ${xparam}; then
@@ -101,7 +101,7 @@ fi
 }
 
 do_mk_sysace() {
-oenote "Generate system ace image"
+bbnote "Generate system ace image"
 # Set Xilinx EDK tools
 if [ -z ${XILINX_EDK} ]; then
 	# Get Xilinx version
@@ -159,17 +159,17 @@ if [ -n "${XILINX_BSP_PATH}" ]; then
 				do_export_xparam $xparam
 				do_mk_xparam $xparam
 			else
-				oefatal "No xparameters header file found, missing Xilinx SDK project"
+				bbfatal "No xparameters header file found, missing Xilinx SDK project"
 				exit 1
 			fi
         fi
 	else
-        oenote "Xilinx board model: ${XILINX_BOARD}"
-		oefatal "XILINX_BSP_PATH points to a valid Xilinx XPS project directory? ! Exit"
+        bbnote "Xilinx board model: ${XILINX_BOARD}"
+		bbfatal "XILINX_BSP_PATH points to a valid Xilinx XPS project directory? ! Exit"
 		exit 1
 	fi
 else
-	oefatal "XILINX_BSP_PATH not defined ! Exit"
+	bbfatal "XILINX_BSP_PATH not defined ! Exit"
 	exit 1
 fi
 }
@@ -178,7 +178,7 @@ do_deploy_prepend() {
 # Install u-boot elf image
 if [ -d "${XILINX_BSP_PATH}" ]; then
 	if [ -e "${S}/u-boot" ]; then
-        oenote "Deploy uboot elf image"
+        bbnote "Deploy uboot elf image"
 		install ${S}/u-boot ${XILINX_BSP_PATH}
     fi
     if [ -n "${XILINX_LOC}" ]; then
@@ -187,7 +187,7 @@ if [ -d "${XILINX_BSP_PATH}" ]; then
 		    install ${XILINX_BSP_PATH}/u-boot-${XILINX_BOARD}.ace ${DEPLOYDIR}
         fi
     else
-        oenote "XILINX_LOC undifined can't generate system ace image"
+        bbnote "XILINX_LOC undifined can't generate system ace image"
     fi
 fi
 }
