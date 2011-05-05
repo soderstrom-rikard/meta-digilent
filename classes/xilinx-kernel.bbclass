@@ -43,24 +43,24 @@ if [ -n "${XILINX_BSP_PATH}" ]; then
 		if [ -d "${S}/arch/${TARGET_ARCH}/boot" ]; then
 			dts=`find "${XILINX_BSP_PATH}" -name *.dts -print`
 			if [ -e "$dts" ]; then
-				oenote "Replacing device tree to match hardware model"
+				bbnote "Replacing device tree to match hardware model"
 				if [ "${TARGET_ARCH}" == "powerpc" ]; then
 					cp -pP ${dts} ${S}/arch/powerpc/boot/dts/virtex${KERNEL_TARGET}.dts
 				else
 					cp -pP ${dts} ${S}/arch/microblaze/platform/generic/${KERNEL_TARGET}.dts
 				fi
 			else
-				oefatal "No device tree found, missing hardware ref design?"
+				bbfatal "No device tree found, missing hardware ref design?"
 				exit 1
 			fi
 		fi
 	else
-		oenote "Xilinx board model: ${XILINX_BOARD}"
-        oefatal "XILINX_BSP_PATH points to a valid Xilinx XPS project directory? ! Exit"
+		bbnote "Xilinx board model: ${XILINX_BOARD}"
+        bbfatal "XILINX_BSP_PATH points to a valid Xilinx XPS project directory? ! Exit"
 		exit 1
 	fi
 else
-	oefatal "XILINX_BSP_PATH not defined ! Exit"
+	bbfatal "XILINX_BSP_PATH not defined ! Exit"
 	exit 1
 fi
 }
