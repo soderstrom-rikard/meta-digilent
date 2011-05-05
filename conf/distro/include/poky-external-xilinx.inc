@@ -15,6 +15,11 @@ python __anonymous () {
 #XILINX_TOOLCHAIN ?= "/opt/xlnx/microblaze_v2.0/microblaze-unknown-linux-gnu"
 PATH =. "${XILINX_TOOLCHAIN}/bin:"
 
+POKYLIBC = "glibc"
+TARGET_VENDOR = "-unknown"
+TARGET_OS = "linux-gnu"
+GLIBCTARGETOS = "linux-gnu"
+
 PREFERRED_PROVIDER_virtual/${TARGET_PREFIX}gcc = "external-xilinx-toolchain"
 PREFERRED_PROVIDER_virtual/${TARGET_PREFIX}gcc-initial = "external-xilinx-toolchain"
 PREFERRED_PROVIDER_virtual/${TARGET_PREFIX}binutils = "external-xilinx-toolchain"
