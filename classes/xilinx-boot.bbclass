@@ -183,7 +183,9 @@ if [ -d "${XILINX_BSP_PATH}" ]; then
     fi
     if [ -n "${XILINX_LOC}" ]; then
 		do_mk_sysace
-		install ${XILINX_BSP_PATH}/u-boot-${XILINX_BOARD}.ace ${DEPLOYDIR}
+        if [ -e  "${XILINX_BSP_PATH}/u-boot-${XILINX_BOARD}.ace" ]; then
+		    install ${XILINX_BSP_PATH}/u-boot-${XILINX_BOARD}.ace ${DEPLOYDIR}
+        fi
     else
         oenote "XILINX_LOC undifined can't generate system ace image"
     fi
