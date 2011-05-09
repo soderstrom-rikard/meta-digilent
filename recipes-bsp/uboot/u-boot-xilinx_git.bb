@@ -1,5 +1,5 @@
 require recipes-bsp/uboot/u-boot.inc
-PR = "r10"
+PR = "r11"
 THISDIR := "${@os.path.dirname(bb.data.getVar('FILE', d, True))}"
 FILESPATH =. "${@base_set_filespath(["${THISDIR}/files"], d)}:"
 LICENSE = "GPLv2+"
@@ -13,7 +13,8 @@ SRC_URI_microblaze = "git://git.xilinx.com/u-boot-xlnx.git;branch=microblaze;pro
 SRC_URI_microblaze += " file://microblaze-genric-add-spi-flash-config.patch"
 
 # Powerpc src location
-SRC_URI = "git://git.xilinx.com/u-boot-xlnx.git;branch=master;protocol=git"
+SRCREV_powerpc = "d49297009f402a20dd59b21212975dd3d79ee6fd"
+SRC_URI_powerpc = "git://git.xilinx.com/u-boot-xlnx.git;branch=master;protocol=git"
 SRC_URI_powerpc += " file://uboot-remove-inline-qualifier-from-show_boot_progres.patch \
                      file://ml405-add-uartlite-config-options.patch \
                      file://ml405-replace-hardcode-macros-for-uartns550.patch \
