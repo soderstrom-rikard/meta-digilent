@@ -7,10 +7,11 @@ LICENSE = "GPL"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 
 PV = "2.6.37"
-PR = "r9"
+PR = "r10"
 
 SRC_URI = "git://git.xilinx.com/linux-2.6-xlnx.git;protocol=git \
            file://linux-xilinx-do-not-use-OS-option.patch \
+           file://kbuild-Fix-passing-Wno-options-to-gcc-4.4.patch \
 		   file://defconfig"
 
 inherit kernel xilinx-kernel xilinx-utils
