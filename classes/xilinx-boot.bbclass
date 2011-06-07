@@ -18,32 +18,6 @@
 #Xilinx ML510 configured as ML507
 #More to come soon ;)
 
-python __anonymous () {
-    import re
-
-    arch = bb.data.getVar('TARGET_ARCH', d, 1)
-    board = bb.data.getVar('XILINX_BOARD', d, 1)
-    cpu = bb.data.getVar('TARGET_CPU', d, 1)
-    target = cpu + '-generic'
-
-    if re.match('powerpc', arch):
-        if board in ['ml507', 'ml510']:
-            uboot_target = 'ml507'
-            uboot_config = 'ml507_config'
-        elif board in ['ml403', 'ml405']:
-            uboot_target = 'ml405'
-            uboot_config = 'ml405_config'
-        else:
-            uboot_target = 'pcc' + target
-            uboot_config = 'xilinx-pcc' + cpu + '-generic_config'
-    else:
-        uboot_target = target
-        uboot_config = arch + '-generic_config'
-
-    bb.data.setVar('UBOOT_TARGET', uboot_target, d)
-    bb.data.setVar('UBOOT_MACHINE', uboot_config, d)
-}
-
 # Find xparameters.h header in hardware project
 find_xparam() {
 # Search for xparameter header
