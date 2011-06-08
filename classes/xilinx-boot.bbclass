@@ -18,20 +18,6 @@
 #Xilinx ML510 configured as ML507
 #More to come soon ;)
 
-# Find xparameters.h header in hardware project
-find_xparam() {
-# Search for xparameter header
-headers=`find ${XILINX_BSP_PATH} -path "*/include/xparameters.h" -print`
-# trim if multiple version are found
-param=`echo ${headers} | cut -d ' ' -f1`
-
-if [ -e "$param" ]; then
-	echo "$param"
-else
-	echo "0"
-fi
-}
-
 do_export_xparam() {
 bbnote "Replacing xparameters header to match hardware model"
 xparam=$1
@@ -128,10 +114,13 @@ do_configure_prepend() {
 if [ -n "${XILINX_BSP_PATH}" ]; then
 	if [ "${XILINX_BOARD}" != "unknown" ]; then
         if [ -d "${S}/board/xilinx" ]; then
-			xparam=$(find_xparam)
-			if [ "$xparam" != "0" ]; then
-				do_export_xparam $xparam
-				do_mk_xparam $xparam
+            # Search for xparameter header
+            headers=`find ${XILINX_BSP_PATH} -path "*/include/xparameters.h" -print`
+            # trim if multiple version are found
+            xparam=`echo ${headers} | cut -d ' ' -f1`
+			if [ -n "${xparam}" ]; then
+				do_export_xparam ${xparam}
+				do_mk_xparam ${xparam}
 			else
 				bbfatal "No xparameters header file found, missing Xilinx SDK project"
 				exit 1
