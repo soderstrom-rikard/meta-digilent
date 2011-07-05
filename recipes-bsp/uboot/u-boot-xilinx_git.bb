@@ -1,15 +1,17 @@
 inherit xilinx-boot xilinx-utils
 require recipes-bsp/uboot/u-boot.inc
 
-PR = "r12"
-PV = "v2009.11+git${SRCPV}"
+PR = "r13"
+PV = "v2009.11"
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=4c6cde5df68eff615d36789dc18edd3b"
 
 # Microblaze src location
-SRCREV_microblaze = "97fb0720feec9a5b7b3ddc275e3880e5b6af74fe"
-SRC_URI_microblaze = "git://git.xilinx.com/u-boot-xlnx.git;branch=microblaze;protocol=git"
-SRC_URI_microblaze += " file://microblaze-genric-add-spi-flash-config.patch"
+SRCREV = "97fb0720feec9a5b7b3ddc275e3880e5b6af74fe"
+SRC_URI = "git://git.xilinx.com/u-boot-xlnx.git;branch=microblaze;protocol=git \
+           file://microblaze-genric-add-spi-flash-config.patch \
+           file://board-microblaze-monitor-flash-len.patch \
+           file://cfi_flash-define-monitor_flash_len.patch"
 
 # Powerpc src location
 SRCREV_powerpc = "d49297009f402a20dd59b21212975dd3d79ee6fd"
