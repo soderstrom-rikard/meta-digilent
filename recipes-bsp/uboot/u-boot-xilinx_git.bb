@@ -1,7 +1,7 @@
 inherit xilinx-boot xilinx-utils
 require recipes-bsp/uboot/u-boot.inc
 
-PR = "r13"
+PR = "r14"
 PV = "v2009.11"
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=4c6cde5df68eff615d36789dc18edd3b"
@@ -23,6 +23,6 @@ SRC_URI_powerpc += " file://uboot-remove-inline-qualifier-from-show_boot_progres
                      file://ml507-replace-hardcode-macros-for-uartns550.patch \
                     "
 
-XILINX_BOARD = "${@find_board(bb.data.getVar('XILINX_BSP_PATH', d, 1), d)}"
+XILINX_BOARD ?= "${@find_board(bb.data.getVar('XILINX_BSP_PATH', d, 1), d)}"
 
 S = "${WORKDIR}/git"
