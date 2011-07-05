@@ -40,19 +40,17 @@ do_configure_prepend() {
 #now depending on the board type and arch do what is nessesary
 if [ -n "${XILINX_BSP_PATH}" ]; then
 	if [ "${XILINX_BOARD}" != "unknown" ]; then
-		if [ -d "${S}/arch/${TARGET_ARCH}/boot" ]; then
-			dts=`find "${XILINX_BSP_PATH}" -name *.dts -print`
-			if [ -e "$dts" ]; then
-				bbnote "Replacing device tree to match hardware model"
-				if [ "${TARGET_ARCH}" == "powerpc" ]; then
-					cp -pP ${dts} ${S}/arch/powerpc/boot/dts/virtex${KERNEL_TARGET}.dts
-				else
-					cp -pP ${dts} ${S}/arch/microblaze/platform/generic/${KERNEL_TARGET}.dts
-				fi
+		dts=`find "${XILINX_BSP_PATH}" -name *.dts -print`
+		if [ -e "$dts" ]; then
+			bbnote "Replacing device tree to match hardware model"
+			if [ "${TARGET_ARCH}" == "powerpc" ]; then
+				cp -pP ${dts} ${S}/arch/powerpc/boot/dts/virtex${KERNEL_TARGET}.dts
 			else
-				bbfatal "No device tree found, missing hardware ref design?"
-				exit 1
+				cp -pP ${dts} ${S}/arch/microblaze/platform/generic/${KERNEL_TARGET}.dts
 			fi
+		else
+			bbfatal "No device tree found, missing hardware ref design?"
+			exit 1
 		fi
 	else
 		bbnote "Xilinx board model: ${XILINX_BOARD}"
