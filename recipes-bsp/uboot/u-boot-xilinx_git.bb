@@ -1,5 +1,5 @@
 inherit xilinx-boot xilinx-utils
-require recipes-bsp/uboot/u-boot.inc
+require recipes-bsp/u-boot/u-boot.inc
 
 PR = "r14"
 PV = "v2009.11"
