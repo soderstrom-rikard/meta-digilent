@@ -16,7 +16,7 @@ SRC_URI = "git://git.xilinx.com/u-boot-xlnx.git;branch=microblaze;protocol=git \
 # Powerpc src location
 SRCREV_powerpc = "d49297009f402a20dd59b21212975dd3d79ee6fd"
 SRC_URI_powerpc = "git://git.xilinx.com/u-boot-xlnx.git;branch=master;protocol=git"
-SRC_URI_powerpc += " file://uboot-remove-inline-qualifier-from-show_boot_progres.patch \
+SRC_URI_powerpc += " file://u-boot-remove-inline-qualifier-from-show_boot_progres.patch \
                      file://ml405-add-uartlite-config-options.patch \
                      file://ml405-replace-hardcode-macros-for-uartns550.patch \
                      file://ml507-add-uartlite-config-options.patch \
