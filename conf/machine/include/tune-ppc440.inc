@@ -1,4 +1,14 @@
-TARGET_CC_ARCH = "-mcpu=440"
-BASE_PACKAGE_ARCH = "ppc440"
-FEED_ARCH = "ppc440"
-PACKAGE_EXTRA_ARCHS += "${BASE_PACKAGE_ARCH} ppc405"
+DEFAULTTUNE ?= "ppc440"
+
+require conf/machine/include/powerpc/arch-powerpc.inc
+
+TUNEVALID[ppc440] = "Enable ppc440 specific processor optimizations"
+TUNE_CCARGS += "${@bb.utils.contains("TUNE_FEATURES", "ppc440", "-mcpu=440", "", d)}"
+TUNE_PKGARCH = "${@bb.utils.contains("TUNE_FEATURES", "ppc440", "ppc440", "${PPCPKGARCH}", d)}"
+
+TARGET_FPU = "soft"
+AVAILTUNES += "ppc440"
+TUNE_FEATURES_tune-ppc440 = "m32 ppc440"
+PACKAGE_EXTRA_ARCHS_tune-ppc440 = "ppc440"
+
+#MACHINEOVERRIDES .= "ppc440"
