@@ -7,7 +7,9 @@ COMPATIBLE_MACHINE = "(virtex4|virtex5|virtex5mb|spartan6-sp605|spartan6-lx9mb)"
 LICENSE = "GPL"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 
-PR = "r14"
+PR = "r15"
+LINUX_VERSION = "2.6.37.1"
+PV = "${LINUX_VERSION}+git${SRCPV}"
 SRC_URI = "git://git.xilinx.com/linux-2.6-xlnx.git;protocol=git \
            file://defconfig"
 
