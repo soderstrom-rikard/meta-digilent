@@ -8,6 +8,6 @@ TUNE_CCARGS += "${@bb.utils.contains("TUNE_FEATURES", "ppc440", "-mcpu=440", "",
 AVAILTUNES += "ppc440"
 TUNE_FEATURES_tune-ppc440 = "m32 fpu-soft ppc440"
 TUNE_PKGARCH_tune-ppc440 = "ppc440"
-PACKAGE_EXTRA_ARCHS_tune-ppc440 = "${PACKAGE_EXTRA_ARCHS_tune-powerpc} ppc440"
+PACKAGE_EXTRA_ARCHS_tune-ppc440 = "${PACKAGE_EXTRA_ARCHS_tune-powerpc-nf} ppc440"
 
 #MACHINEOVERRIDES .= "ppc440"
