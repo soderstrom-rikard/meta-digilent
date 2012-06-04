@@ -21,10 +21,10 @@
 do_export_xparam() {
 bbnote "Replacing xparameters header to match hardware model"
 xparam=$1
-if [ "${TARGET_ARCH}" == "powerpc" ]; then
+if [ "${TARGET_ARCH}" = "powerpc" ]; then
 	cpu="PPC`echo ${TARGET_CPU} | tr '[:lower:]' '[:upper:]'`"
 else
-	cpu=`echo ${TARGET_CPU} | tr '[:lower:]' '[:upper:]'`
+	cpu="`echo ${TARGET_CPU} | tr '[:lower:]' '[:upper:]'`"
 fi
 cp ${xparam} ${S}/board/xilinx/${XILINX_BOARD}
 echo "/*** Cannonical definitions ***/
@@ -39,7 +39,7 @@ echo "/*** Cannonical definitions ***/
 do_mk_xparam() {
 bbnote "Replacing xparameters.mk configuration file"
 xparam=$1
-if [ "${TARGET_ARCH}" == "powerpc" ]; then
+if [ "${TARGET_ARCH}" = "powerpc" ]; then
     if grep -qoe XPAR_IIC_0_DEVICE_ID ${xparam}; then
         echo -e "XPAR_IIC        := y" > ${S}/board/xilinx/${XILINX_BOARD}/xparameters.mk
     else
@@ -65,7 +65,7 @@ bbnote "Generate system ace image"
 # Set Xilinx EDK tools
 if [ -z ${XILINX_EDK} ]; then
 	# Get Xilinx version
-	if [ ${BUILD_ARCH} == "x86_64" ]; then
+	if [ "${BUILD_ARCH}" = "x86_64" ]; then
 		EDK_SRCIPT="settings64.sh"
 	else
 		EDK_SRCIPT="settings.sh"
@@ -98,7 +98,7 @@ if [ ! -f implementation/download.bit ]; then
 	make -f ${XILINX_BSP_PATH}/system.make init_bram
 fi
 
-if [ "${TARGET_ARCH}" == "powerpc" ]; then
+if [ "${TARGET_ARCH}" = "powerpc" ]; then
 	# Find u-boot start address
 	start_address=`${TARGET_PREFIX}objdump -x u-boot | grep -w "start address" | cut -d ' ' -f3`
 	# Generate ACE image
