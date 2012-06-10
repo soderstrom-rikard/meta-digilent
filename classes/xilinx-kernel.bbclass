@@ -42,10 +42,12 @@ if [ -n "${XILINX_BSP_PATH}" ]; then
 	if [ "${XILINX_BOARD}" != "unknown" ]; then
 		dts=`find "${XILINX_BSP_PATH}" -name *.dts -print`
 		if [ -e "$dts" ]; then
-			bbnote "Replacing device tree to match hardware model"
-			if [ "${TARGET_ARCH}" == "powerpc" ]; then
+			bbnote "Xilinx BSP device tree located in: ${dts}"
+			if [ "${TARGET_ARCH}" = "powerpc" ]; then
+				bbnote "Replacing linux kernel powerpc device tree to match located hardware model"
 				cp -pP ${dts} ${S}/arch/powerpc/boot/dts/virtex${KERNEL_TARGET}.dts
 			else
+				bbnote "Replacing linux kernel microblaze device tree to match located hardware model"
 				cp -pP ${dts} ${S}/arch/microblaze/platform/generic/${KERNEL_TARGET}.dts
 			fi
 		else
