@@ -65,20 +65,31 @@ bbnote "Generate system ace image"
 # Set Xilinx EDK tools
 if [ -z ${XILINX_EDK} ]; then
 	# Get Xilinx version
-	if [ "${BUILD_ARCH}" = "x86_64" ]; then
-		EDK_SRCIPT="settings64.sh"
-	else
-		EDK_SRCIPT="settings.sh"
-	fi
-	# Strip EDK version
 	XILINX_VER=`echo ${XILINX_LOC} | tr -d '[:alpha:]/_'`
+	bbnote "XILINX ISE version ${XILINX_VER}, EDK script location ${XILINX_LOC}/${EDK_SCRIPT}"
 	if [ "${XILINX_VER}" \> "13" ]; then
-		source ${XILINX_LOC}/${EDK_SRCIPT} ${XILINX_LOC}
+		# EDK version 13.1 and higher
+		# Check host computer build architecture
+		if [ "${BUILD_ARCH}" = "x86_64" ]; then
+			EDK_SCRIPT="settings64.sh"
+		else
+			EDK_SCRIPT="settings32.sh"
+		fi
+		# Setup Xilinx environment variables
+		source ${XILINX_LOC}/${EDK_SCRIPT} ${XILINX_LOC}
 	else
-		# EDK version prior to 13.1 require to additionaly source this scripts
-		source ${XILINX_LOC}/${EDK_SRCIPT} ${XILINX_LOC}
-		source ${XILINX_LOC}/ISE/${EDK_SRCIPT} ${XILINX_LOC}/ISE
-		source ${XILINX_LOC}/EDK/${EDK_SRCIPT} ${XILINX_LOC}/EDK
+		# EDK versions prior to 13.1
+		# Check host computer build architecture
+		if [ "${BUILD_ARCH}" = "x86_64" ]; then
+			EDK_SCRIPT="settings64.sh"
+		else
+			EDK_SCRIPT="settings.sh"
+		fi
+		# Setup Xilinx environment variables
+		# EDK versions prior to 13.1 require additional ISE and EDK scripts to be sourced
+		source ${XILINX_LOC}/${EDK_SCRIPT} ${XILINX_LOC}
+		source ${XILINX_LOC}/ISE/${EDK_SCRIPT} ${XILINX_LOC}/ISE
+		source ${XILINX_LOC}/EDK/${EDK_SCRIPT} ${XILINX_LOC}/EDK
 	fi
 fi
 
@@ -90,11 +101,12 @@ fi
 # This could be ovirrided by setting in ${XILINX_BSP_PATH}/system_incl.make
 # BRAMINIT_ELF_FILES = $(PPC440_0_BOOTLOOP)
 # BRAMINIT_ELF_FILES_ARGS = -pe ppc440_0 $(PPC440_0_BOOTLOOP)
-# For Xilinx EDK 13.1 Bootlop is set by default
+# For Xilinx EDK 13.1 Bootloop is set by default
 #
 cd ${XILINX_BSP_PATH}
 if [ ! -f implementation/download.bit ]; then
 	# Bitstream not found generate it
+	bbnote "bitstream not found, generating it"
 	make -f ${XILINX_BSP_PATH}/system.make init_bram
 fi
 
@@ -141,16 +153,17 @@ do_deploy_prepend() {
 # Install u-boot elf image
 if [ -d "${XILINX_BSP_PATH}" ]; then
 	if [ -e "${S}/u-boot" ]; then
-        bbnote "Deploy uboot elf image"
+        bbnote "Deploying uboot elf image to ${XILINX_BSP_PATH}"
 		install ${S}/u-boot ${XILINX_BSP_PATH}
     fi
     if [ -n "${XILINX_LOC}" ]; then
+                bbnote "Xilinx design tools installed in ${XILINX_LOC}"
 		do_mk_sysace
         if [ -e  "${XILINX_BSP_PATH}/u-boot-${XILINX_BOARD}.ace" ]; then
 		    install ${XILINX_BSP_PATH}/u-boot-${XILINX_BOARD}.ace ${DEPLOYDIR}
         fi
     else
-        bbnote "XILINX_LOC undifined can't generate system ace image"
+        bbnote "XILINX_LOC undefined can't generate system ace image"
     fi
 fi
 }
