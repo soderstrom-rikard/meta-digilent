@@ -22,16 +22,14 @@ def device_tree(a, d):
 
     board = bb.data.getVar('XILINX_BOARD', d, 1)
     cpu = bb.data.getVar('TARGET_CPU', d, 1)
-
     if re.match('powerpc', a):
         target = cpu + '-' + board
-        dts = 'arch/' + a + '/boot/dts/virtex' + target + '.dts'
+        dts = '${S}/arch/' + a + '/boot/dts/virtex' + target + '.dts'
     else:
         target = 'system'
-        dts = 'arch/' + a + '/boot/dts/' + target + '.dts'
+        dts = '${S}/arch/' + a + '/boot/dts/' + target + '.dts'
 
     bb.data.setVar('KERNEL_TARGET', target, d)
-
     return dts
 
 
@@ -44,10 +42,10 @@ if [ -n "${XILINX_BSP_PATH}" ]; then
 		if [ -e "$dts" ]; then
 			bbnote "Xilinx BSP device tree located in: ${dts}"
 			if [ "${TARGET_ARCH}" = "powerpc" ]; then
-				bbnote "Replacing linux kernel powerpc device tree to match located hardware model"
+				bbnote "Replacing linux kernel powerpc device tree to match located hardware model: virtex${KERNEL_TARGET}.dts"
 				cp -pP ${dts} ${S}/arch/powerpc/boot/dts/virtex${KERNEL_TARGET}.dts
 			else
-				bbnote "Replacing linux kernel microblaze device tree to match located hardware model"
+				bbnote "Replacing linux kernel microblaze device tree to match located hardware model: ${KERNEL_TARGET}.dts"
 				cp -pP ${dts} ${S}/arch/microblaze/platform/generic/${KERNEL_TARGET}.dts
 			fi
 		else
