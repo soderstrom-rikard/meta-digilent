@@ -104,7 +104,9 @@ fi
 # For Xilinx EDK 13.1 Bootloop is set by default
 #
 cd ${XILINX_BSP_PATH}
-if [ ! -f implementation/download.bit ]; then
+#XILINX_BITSTREAM_FILE=implementation/download.bit
+XILINX_BITSTREAM_FILE=implementation/system.bit
+if [ ! -f ${XILINX_BITSTREAM_FILE} ]; then
 	# Bitstream not found generate it
 	bbnote "bitstream not found, generating it"
 	make -f ${XILINX_BSP_PATH}/system.make init_bram
@@ -114,7 +116,7 @@ if [ "${TARGET_ARCH}" = "powerpc" ]; then
 	# Find u-boot start address
 	start_address=`${TARGET_PREFIX}objdump -x u-boot | grep -w "start address" | cut -d ' ' -f3`
 	# Generate ACE image
-	xmd -tcl genace.tcl -hw implementation/download.bit -elf u-boot \
+	xmd -tcl genace.tcl -hw ${XILINX_BITSTREAM_FILE} -elf u-boot \
 	-target ppc_hw -start_address ${start_address} -ace u-boot-${XILINX_BOARD}.ace \
 	-board ${XILINX_BOARD}
 fi
