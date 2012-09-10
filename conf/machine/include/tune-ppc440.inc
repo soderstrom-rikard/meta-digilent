@@ -6,7 +6,7 @@ TUNEVALID[ppc440] = "Enable ppc440 specific processor optimizations"
 TUNE_CCARGS += "${@bb.utils.contains("TUNE_FEATURES", "ppc440", "-mcpu=440", "", d)}"
 
 AVAILTUNES += "ppc440"
-TUNE_FEATURES_tune-ppc440 = "m32 fpu-soft ppc440"
+TUNE_FEATURES_tune-ppc440 = "m32 ppc440 fpu-soft"
 TUNE_PKGARCH_tune-ppc440 = "ppc440"
 PACKAGE_EXTRA_ARCHS_tune-ppc440 = "${PACKAGE_EXTRA_ARCHS_tune-powerpc-nf} ppc440"
 
