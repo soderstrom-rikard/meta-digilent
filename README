@@ -10,6 +10,11 @@ URI: git://git.yoctoproject.org/poky.git
 branch: master
 revision: HEAD
 
+This layer is maintained by:
+
+	Elvis Dowson  <elvis.dowson@gmail.com>
+	Adrian Alonso <aalonso00@gmail.com>
+
 Contributing
 ------------
 
@@ -17,4 +22,8 @@ To contribute to this layer you should send patches for review to the
 mailing list.
 
 Mailing list: yocto@yoctoproject.org
+Use "[meta-xilinx]" as subject prefix
 Source code: git://git.yoctoproject.org/meta-xilinx
+
+When sending patches, please use something like:
+git send-email --to yocto@yoctoproject.org --subject-prefix='meta-xilinx][PATCH']'
