@@ -21,19 +21,12 @@
 do_export_xparam() {
 bbnote "Replacing xparameters header to match hardware model"
 xparam=$1
-if [ "${TARGET_ARCH}" = "powerpc" ]; then
-	cpu="PPC`echo ${TARGET_CPU} | tr '[:lower:]' '[:upper:]'`"
-else
-	cpu="`echo ${TARGET_CPU} | tr '[:lower:]' '[:upper:]'`"
-fi
 cp ${xparam} ${S}/board/xilinx/${XILINX_BOARD}
 echo "/*** Cannonical definitions ***/
-#define XPAR_PLB_CLOCK_FREQ_HZ XPAR_PROC_BUS_0_FREQ_HZ
-#define XPAR_CORE_CLOCK_FREQ_HZ XPAR_CPU_${cpu}_CORE_CLOCK_FREQ_HZ
 #ifndef XPAR_DDR2_SDRAM_MEM_BASEADDR
 # define XPAR_DDR2_SDRAM_MEM_BASEADDR XPAR_DDR_SDRAM_MPMC_BASEADDR
 #endif
-#define XPAR_PCI_0_CLOCK_FREQ_HZ    0" >> ${S}/board/xilinx/${XILINX_BOARD}/xparameters.h
+" >> ${S}/board/xilinx/${XILINX_BOARD}/xparameters.h
 }
 
 do_mk_xparam() {
