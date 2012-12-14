@@ -59,7 +59,7 @@ bbnote "Generate system ace image"
 if [ -z ${XILINX_EDK} ]; then
 	# Get Xilinx version
 	XILINX_VER=`echo ${XILINX_LOC} | tr -d '[:alpha:]/_'`
-	bbnote "XILINX ISE version ${XILINX_VER}, EDK script location ${XILINX_LOC}/${EDK_SCRIPT}"
+	bbnote "XILINX ISE version ${XILINX_VER}"
 	if [ "${XILINX_VER}" \> "13" ]; then
 		# EDK version 13.1 and higher
 		# Check host computer build architecture
@@ -84,6 +84,7 @@ if [ -z ${XILINX_EDK} ]; then
 		source ${XILINX_LOC}/ISE/${EDK_SCRIPT} ${XILINX_LOC}/ISE
 		source ${XILINX_LOC}/EDK/${EDK_SCRIPT} ${XILINX_LOC}/EDK
 	fi
+	bbnote "XILINX EDK script location ${XILINX_LOC}/${EDK_SCRIPT}"
 fi
 
 # The system ace image generation assumes that user had
@@ -116,8 +117,8 @@ fi
 }
 
 do_configure_prepend() {
-#first check that the XILINX_BSP_PATH and XILINX_BOARD have been defined in local.conf
-#now depending on the board type and arch do what is nessesary
+# First check that the XILINX_BSP_PATH and XILINX_BOARD have been defined in local.conf
+# and then perform required configuration, depending upon the board type and architecture.
 if [ -n "${XILINX_BSP_PATH}" ]; then
 	if [ "${XILINX_BOARD}" != "unknown" ]; then
         if [ -d "${S}/board/xilinx" ]; then
