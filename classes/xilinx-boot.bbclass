@@ -98,12 +98,32 @@ fi
 # For Xilinx EDK 13.1 Bootloop is set by default
 #
 cd ${XILINX_BSP_PATH}
-#XILINX_BITSTREAM_FILE=implementation/download.bit
-XILINX_BITSTREAM_FILE=implementation/system.bit
-if [ ! -f ${XILINX_BITSTREAM_FILE} ]; then
-	# Bitstream not found generate it
-	bbnote "bitstream not found, generating it"
-	make -f ${XILINX_BSP_PATH}/system.make init_bram
+XILINX_BITSTREAM_FILE_NAME=system.bit
+
+# Locate the bitstream file.
+XILINX_BITSTREAM_FILE=$(find ${XILINX_BSP_PATH} -path "*/${XILINX_BITSTREAM_FILE_NAME}" -print)
+if [ -z ${XILINX_BITSTREAM_FILE} ]; then
+		# Bitstream not found, generate it.
+		bbnote "Bitstream not found, generating it."
+
+		# Locate the bitstream makefile.
+		XILINX_BITSTREAM_MAKEFILE_NAME=system.make
+		XILINX_BITSTREAM_MAKEFILE=$(find ${XILINX_BSP_PATH} -name "${XILINX_BITSTREAM_MAKEFILE_NAME}" -print)
+		bbnote "Using bitstream makefile ${XILINX_BITSTREAM_MAKEFILE}"
+
+		# Change to the bitstream makefile directory.
+		XILINX_BITSTREAM_MAKEFILE_DIRECTORY=$(dirname ${XILINX_BITSTREAM_MAKEFILE})
+		cd ${XILINX_BITSTREAM_MAKEFILE_DIRECTORY}
+
+		# Generate the bitstream.
+		make -f ${XILINX_BITSTREAM_MAKEFILE} init_bram
+
+		# Store the location of the newly generated bitstream file.
+		XILINX_BITSTREAM_FILE=$(find ${XILINX_BSP_PATH} -path "*/${XILINX_BITSTREAM_FILE_NAME}" -print)
+		bbnote "Generated bitstream file ${XILINX_BITSTREAM_FILE}"
+	else
+		# Bitstream found, use existing bitstream.
+		bbnote "Using existing bitstream file ${XILINX_BITSTREAM_FILE}"
 fi
 
 if [ "${TARGET_ARCH}" = "powerpc" ]; then
