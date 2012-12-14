@@ -13,7 +13,7 @@
 # CONFIG_40x is not set
 CONFIG_44x=y
 # CONFIG_E200 is not set
-# CONFIG_PPC_FPU is not set
+CONFIG_PPC_FPU=y
 CONFIG_4xx=y
 CONFIG_BOOKE=y
 CONFIG_PTE_64BIT=y
