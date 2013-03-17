@@ -18,7 +18,7 @@ PROVIDES = "\
 # This are also provided by prebuilt toolchain
 # linux-libc-headers \
 # virtual/linux-libc-headers \
-RPROVIDES = "glibc-utils libsegfault glibc-thread-db libgcc-dev libstdc++-dev libstdc++"
+#RPROVIDES = "glibc-utils libsegfault glibc-thread-db libgcc-dev libstdc++-dev libstdc++"
 PACKAGES_DYNAMIC = "glibc-gconv-*"
 INHIBIT_DEFAULT_DEPS = "1"
 PR = "r0"
