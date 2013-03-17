@@ -34,6 +34,11 @@ def device_tree(a, d):
 
 
 do_configure_prepend() {
+if [ "${KERNEL_DEVICETREE}" ]; then
+   bbnote "Using linux kernel device tree in: ${KERNEL_DEVICETREE}"
+   exit 0
+fi
+
 #first check that the XILINX_BSP_PATH and XILINX_BOARD have been defined in local.conf
 #now depending on the board type and arch do what is nessesary
 if [ -n "${XILINX_BSP_PATH}" ]; then
