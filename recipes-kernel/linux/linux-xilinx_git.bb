@@ -1,21 +1,26 @@
-inherit kernel xilinx-kernel xilinx-utils
-require recipes-kernel/linux/linux-xilinx.inc
+SUMMARY = "Xilinx Linux Kernel, bleeding edge version"
+DESCRIPTION = "Xilinx Linux Kernel for Xilinx FPGA development platforms, bleeding edge version."
+AUTHOR = "Elvis Dowson <elvis.dowson@gmail.com>"
+HOMEPAGE = "http://git.xilinx.com/?p=linux-xlnx.git;a=summary"
+SECTION = "kernel"
+LICENSE = "GPLv2"
+
+require recipes-kernel/linux/linux-yocto.inc
 
 DEFAULT_PREFERENCE = "-1"
 
-KBRANCH = "master"
+LINUX_VERSION ?= "3.6.0"
+LINUX_VERSION_EXTENSION = "-xilinx"
 
-LINUX_VERSION ?= "3.3.0"
-SRCREV_pn-${PN} = "ed63a4d76efadcb68f5776e4244766ffea226cc4"
-FILESPATH = "${@base_set_filespath([ '${FILE_DIRNAME}/${PN}/${SOC_FAMILY}' ], d)}"
+SRCREV_pn-${PN} = "c0265c7446eeedb19faae79ca1806952fe360f50"
 
-PR = "r17"
 PV = "${LINUX_VERSION}+git-${SRCREV}"
+PR = "r18"
 
+KBRANCH = "master-next"
 SRC_URI = "git://git.xilinx.com/linux-xlnx.git;protocol=git;branch=${KBRANCH} \
            file://defconfig"
 
-XILINX_BOARD ?= "${@find_board(bb.data.getVar('XILINX_BSP_PATH', d, 1), d)}"
-KERNEL_DEVICETREE_microblazeel = "${@device_tree(bb.data.getVar('TARGET_CPU', d, 1), d)}"
+FILESPATH = "${@base_set_filespath([ '${FILE_DIRNAME}/${PN}/${SOC_FAMILY}' ], d)}"
 
-COMPATIBLE_MACHINE = "(virtex4|virtex-5|virtex5mb|spartan6-sp605|spartan6-lx9mb)"
+COMPATIBLE_MACHINE = "(zynq-7)"
