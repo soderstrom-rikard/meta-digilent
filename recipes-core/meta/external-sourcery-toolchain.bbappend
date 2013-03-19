@@ -7,7 +7,7 @@ do_pre_install_tool_changes() {
 	sysroot="${EXTERNAL_TOOLCHAIN_SYSROOT}"
 
 	# Wants to delete '${D}${datadir}/zoneinfo'
-	mkdir -p ${D}${datadir}/zoneinfo
+	mkdir -p ${sysroot}/usr/share/zoneinfo
 }
 
 # Ignore GNU_HASH for libbfd (microblaze toolchain only)
