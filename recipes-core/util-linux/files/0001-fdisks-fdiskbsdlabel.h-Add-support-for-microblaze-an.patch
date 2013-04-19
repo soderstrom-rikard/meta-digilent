@@ -1,0 +1,28 @@
+From af1bfbd8f95f2dfa879960cc5edd0922b9fac458 Mon Sep 17 00:00:00 2001
+From: Elvis Dowson <elvis.dowson@gmail.com>
+Date: Wed, 3 Apr 2013 22:15:10 +0400
+Subject: [PATCH] fdisks/fdiskbsdlabel.h: Add support for microblaze and
+ microblazeel.
+
+Signed-off-by: Elvis Dowson <elvis.dowson@gmail.com>
+---
+ fdisks/fdiskbsdlabel.h |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/fdisks/fdiskbsdlabel.h b/fdisks/fdiskbsdlabel.h
+index c7cc818..dd908fd 100644
+--- a/fdisks/fdiskbsdlabel.h
++++ b/fdisks/fdiskbsdlabel.h
+@@ -55,7 +55,8 @@
+ #elif defined (__alpha__) || defined (__powerpc__) || defined (__ia64__) || defined (__hppa__)
+ #define BSD_LABELSECTOR   0
+ #define BSD_LABELOFFSET   64
+-#elif defined (__s390__) || defined (__s390x__)
++#elif defined (__s390__) || defined (__s390x__) || \
++      defined (__microblaze__) || defined (__microblazeel__)
+ #define BSD_LABELSECTOR   1
+ #define BSD_LABELOFFSET   0
+ #else
+-- 
+1.7.10.4
+
