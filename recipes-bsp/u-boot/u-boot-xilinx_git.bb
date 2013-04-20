@@ -17,17 +17,17 @@ FILESPATH = "${@base_set_filespath([ '${FILE_DIRNAME}/${PN}/${SOC_FAMILY}' ], d)
 # Virtex-5 src location
 KBRANCH_virtex-5 = "master"
 SRC_URI_virtex-5 = "git://git.denx.de/u-boot.git;branch=${KBRANCH};protocol=git"
-SRCREV_${PN}_virtex-5 = "415d386877df49eb051b85ef74fa59a16dc17c7d"
+SRCREV_virtex-5 = "415d386877df49eb051b85ef74fa59a16dc17c7d"
 
 # Spartan-6 src location
 KBRANCH_spartan-6 = "master"
 SRC_URI_spartan-6 = "git://git.xilinx.com/u-boot-xlnx.git;branch=${KBRANCH};protocol=git"
-SRCREV_${PN}_spartan-6 = "26786228acfdc0a02190a8d9ca9fcca51a5dcf28"
+SRCREV_spartan-6 = "26786228acfdc0a02190a8d9ca9fcca51a5dcf28"
 
 # Zynq-7 src location
 KBRANCH_zynq-7 = "master"
 SRC_URI_zynq-7 = "git://git.xilinx.com/u-boot-xlnx.git;branch=${KBRANCH};protocol=git"
-SRCREV_${PN}_zynq-7 = "26786228acfdc0a02190a8d9ca9fcca51a5dcf28"
+SRCREV_zynq-7 = "26786228acfdc0a02190a8d9ca9fcca51a5dcf28"
 
 XILINX_BOARD ?= "${@find_board(bb.data.getVar('XILINX_BSP_PATH', d, 1), d)}"
 
