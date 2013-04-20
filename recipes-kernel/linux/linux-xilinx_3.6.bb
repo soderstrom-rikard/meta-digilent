@@ -25,8 +25,10 @@ SRC_URI_append_zynq-7-zc702    += "file://zynq_base_trd_14_4.patch"
 
 # Add additional dts files.
 SRC_URI_append_zynq-7-zc702    += "file://zynq-7-zc702-hdmi-xylon.dts"
+SRC_URI_append_zynq-7-zedboard += "file://zynq-7-zedboard.dts"
 
 KERNEL_DEVICETREE_append_zynq-7-zc702    += "${WORKDIR}/zynq-7-zc702-hdmi-xylon.dts"
+KERNEL_DEVICETREE_append_zynq-7-zedboard += "${WORKDIR}/zynq-7-zedboard.dts"
 
 FILESPATH = "${@base_set_filespath([ '${FILE_DIRNAME}/${PN}-${PV}/${SOC_FAMILY}' ], d)}"
 
