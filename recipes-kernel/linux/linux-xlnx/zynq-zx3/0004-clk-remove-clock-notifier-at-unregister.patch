@@ -1,0 +1,31 @@
+From 824359756eba9952fc0b1fc032e0659df9be7ad7 Mon Sep 17 00:00:00 2001
+From: David Andrey <david.andrey@netmodule.com>
+Date: Mon, 22 Apr 2013 14:09:15 +0200
+Subject: [PATCH 4/9] clk: remove clock notifier at unregister
+
+Clock notifier node is now removed from the
+notifier list during unregister
+
+Signed-off-by: David Andrey <david.andrey@netmodule.com>
+Acked-by: Martin Meuli <martin.meuli@netmodule.com>
+---
+ drivers/clk/clk.c |    3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index 72633c6..2603abe0 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -1653,7 +1653,10 @@ int clk_notifier_unregister(struct clk *clk, struct notifier_block *nb)
+
+		/* XXX the notifier code should handle this better */
+		if (!cn->notifier_head.head) {
++			if (clk->notifier_count)
++				BUG();
+			srcu_cleanup_notifier_head(&cn->notifier_head);
++			list_del(&cn->node);
+			kfree(cn);
+		}
+
+--
+1.7.10.4

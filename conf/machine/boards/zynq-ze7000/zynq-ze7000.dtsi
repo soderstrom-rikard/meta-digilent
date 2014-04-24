@@ -1,0 +1,163 @@
+/include/ "zynq-7-base.dtsi"
+/ {
+	model = "ze7000";
+
+	chosen {
+		bootargs = "console=ttyPS0,115200 earlyprintk";
+		linux,stdout-path = &ps7_uart_0;
+	} ;
+
+	aliases {
+		serial0 = &ps7_uart_0;
+	} ;
+
+	ps7_ddr_0: memory@0 {
+		device_type = "memory";
+		reg = < 0x0 0x20000000 >;
+	} ;
+
+	ps7_axi_interconnect_0: amba@0 {
+
+		ps7_smc_0: smc@0xe000e000 {
+			#address-cells = <1>;
+			#size-cells = <1>;
+			clock-names = "ref_clk", "aper_clk";
+			clocks = <&clkc 11>, <&clkc 44>;
+			compatible = "xlnx,ps7-smcc-1.00.a", "xlnx,ps7-smc";
+			interrupt-parent = <&ps7_scugic_0>;
+			interrupts = <0 18 4>;
+			ranges ;
+			reg = <0xe000e000 0x1000>;
+			xlnx,addr25 = <0x0>;
+			xlnx,nor-chip-sel0 = <0x0>;
+			xlnx,nor-chip-sel1 = <0x0>;
+			xlnx,sram-chip-sel0 = <0x0>;
+			xlnx,sram-chip-sel1 = <0x0>;
+
+			nand@e1000000 {
+				compatible = "xlnx,ps7-nand-1.00.a";
+				reg = <0xe1000000 0x1000000>;
+				xlnx,nand-width = <8>;
+				/* timings in smc cycles count */
+				xlnx,nand-cycle-t0 = <3>; /* tRC */
+				xlnx,nand-cycle-t1 = <3>; /* tWC */
+				xlnx,nand-cycle-t2 = <1>; /* tREA */
+				xlnx,nand-cycle-t3 = <2>; /* tWP */
+				xlnx,nand-cycle-t4 = <2>; /* tCLR */
+				xlnx,nand-cycle-t5 = <2>; /* tAR */
+				xlnx,nand-cycle-t6 = <3>; /* tRR */
+				#address-cells = <1>;
+				#size-cells = <1>;
+			} ;
+		} ;
+
+		ps7_ethernet_0: ps7-ethernet@e000b000 {
+			reg = <0xe000b000 0x1000>;
+			interrupts = <0 22 4>;
+			interrupt-parent = <&ps7_scugic_0>;
+			phy-handle = <&phy0>;
+			phy-mode = "rgmii-id";
+			xlnx,slcr-div0-1000Mbps = <8>;
+			xlnx,slcr-div0-100Mbps = <8>;
+			xlnx,slcr-div0-10Mbps = <8>;
+			xlnx,slcr-div1-1000Mbps = <1>;
+			xlnx,slcr-div1-100Mbps = <5>;
+			xlnx,slcr-div1-10Mbps = <50>;
+			local-mac-address = [ ];
+			#address-cells = <0x1>;
+			#size-cells = <0x0>;
+			mdio {
+				#address-cells = <1>;
+				#size-cells = <0>;
+				phy0: phy@3 {
+					compatible = "micrel,ksz9031";
+					device_type = "ethernet-phy";
+					reg = <0x3>;
+				};
+			};
+		} ;
+
+		ps7_ethernet_1: ps7-ethernet@e000c000 {
+			reg = <0xe000c000 0x1000>;
+			interrupts = <0 45 0>;
+			interrupt-parent = <&ps7_scugic_0>;
+			phy-handle = <&phy1 &phy2 &phy3 &phy4>;
+			phy-mode = "";
+			/*
+			xlnx,slcr-div0-1000Mbps = <8>;
+			xlnx,slcr-div0-100Mbps = <8>;
+			xlnx,slcr-div0-10Mbps = <8>;
+			xlnx,slcr-div1-1000Mbps = <1>;
+			xlnx,slcr-div1-100Mbps = <5>;
+			xlnx,slcr-div1-10Mbps = <50>;
+			*/
+			local-mac-address = [ ];
+			#address-cells = <0x1>;
+			#size-cells = <0x0>;
+			mdio {
+				#address-cells = <1>;
+				#size-cells = <0>;
+				phy1: phy@7 {
+					compatible = "marvell,88e1118";
+					device_type = "ethernet-phy";
+					reg = <7>;
+				};
+
+				phy2: phy@6 {
+					compatible = "marvell,88e1118";
+					device_type = "ethernet-phy";
+					reg = <6>;
+				};
+
+				phy3: phy@5 {
+					compatible = "marvell,88e1118";
+					device_type = "ethernet-phy";
+					reg = <5>;
+				};
+
+				phy4: phy@4 {
+					compatible = "marvell,88e1118";
+					device_type = "ethernet-phy";
+					reg = <4>;
+				};
+			} ;
+		};
+
+		ps7_gpio_0: ps7-gpio@e000a000 {
+			gpio-mask-high = <0xc0000>;
+			gpio-mask-low = <0xfe81>;
+		} ;
+
+		ps7_qspi_linear_0: ps7-qspi-linear@fc000000 {
+			xlnx,qspi-clk-freq-hz = <0xe4e1c0>;
+		} ;
+
+		ps7_sd_0: ps7-sdio@e0100000 {
+			clock-frequency = <125000000>;
+			xlnx,sdio-clk-freq-hz = <0x3f93e10>;
+		} ;
+
+		ps7_i2c_0: ps7-i2c@e0004000 {
+
+			board_eeprom@54 {
+				compatible = "at,24c64";
+				reg = <0x54>;
+			} ;
+
+			rtc@6F {
+				compatible = "isl12022";
+				reg = <0x6F>;
+			} ;
+		} ;
+
+		/* Disabled Devices */
+		ps7_uart_1: serial@e0001000 { compatible = "invalid"; };
+		ps7_sd_1: ps7-sdio@e0101000 { compatible = "invalid"; };
+		ps7_wdt_0: ps7-wdt@f8005000 { compatible = "invalid"; };
+		ps7_can_0: ps7-can@e0008000 { compatible = "invalid"; };
+		ps7_can_1: ps7-can@e0009000 { compatible = "invalid"; };
+		ps7_usb_1: ps7-usb@e0003000 { compatible = "invalid"; };
+		ps7_dma_ns: ps7-dma@f8004000 { compatible =" invalid"; };
+		ps7_i2c_1: ps7-i2c@e0005000 { compatible = "invalid"; };
+	} ;
+} ;
