@@ -1,9 +1,9 @@
 /*
- * microZed DTS file header for ramdisk boot.
+ * ze7000 DTS file header for ramdisk boot.
  */
 
 /dts-v1/;
-/include/ "zynq-ze7000.dtsi"
+/include/ "ze7000-zynq7.dtsi"
 / {
 	chosen {
 		bootargs = "console=ttyPS0,115200 root=/dev/ram rw ip=none earlyprintk";
