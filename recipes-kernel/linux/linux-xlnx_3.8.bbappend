@@ -24,9 +24,7 @@ def find_config_fragments(d):
     workDir=d.getVar('WORKDIR', True) + "/"
     sources_list=[]
     for s in machineKConfig.split():
-        bb.note("s: " + s)
         if s.endswith('.cfg'):
             s=workDir+s
-            bb.note("Source: " + s)
             sources_list.append(s)
     return sources_list
