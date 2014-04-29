@@ -17,7 +17,7 @@ PATCH_LIST ?= ""
 PATCH_LIST_ze7000-zynq7 = "${ZX3_ZYNQ7_PATCHSET}"
 
 # Make sure that this config is appended at the end of MACHINE_KCONFIG (because of zynq_defconfig_3.8.cfg)
-MACHINE_KCONFIG_append_ze7000-zynq7 = " ze7000-zynq7/ze7000_configuration.cfg "
+MACHINE_KCONFIG_append_ze7000-zynq7 = " ze7000-zynq7/ze7000_configuration.cfg ze7000-zynq7/ze7000_mmc.cfg "
 
 SRC_URI_append += " ${PATCH_LIST}"
 
