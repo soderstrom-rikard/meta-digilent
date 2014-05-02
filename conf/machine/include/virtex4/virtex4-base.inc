@@ -1,9 +1,9 @@
 # Provides the Xilinx Virtex-4 common settings
 
 # Specify the SOC Family
-SOC_FAMILY = "virtex-4"
+SOC_FAMILY = "virtex4"
 
-include conf/machine/include/virtex-4-default-providers.inc
+include conf/machine/include/virtex4-default-providers.inc
 
 # Add u-boot image to rootfs
 EXTRA_IMAGEDEPENDS = "u-boot-xilinx"
