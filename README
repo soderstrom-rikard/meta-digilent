@@ -1,12 +1,16 @@
-OpenEmbedded/Yocto BSP layer for Xilinx reconfigurable platforms
-=================================================================
+OpenEmbedded/Yocto BSP layer providing community support for Xilinx reconfigurable platforms
+============================================================================================
 
-This layer provides support for Xilinx reconfigurables platforms
+This layer provides community support for Xilinx reconfigurable platforms
 for use with OpenEmbedded and/or Yocto.
 
-This layer depends on:
+This layer depends on the following layers:
 
 URI: git://git.yoctoproject.org/poky.git
+branch: master
+revision: HEAD
+
+URI: git://git.yoctoproject.org/meta-xilinx.git
 branch: master
 revision: HEAD
 
@@ -15,6 +19,31 @@ This layer is maintained by:
 	Elvis Dowson  <elvis.dowson@gmail.com>
 	Adrian Alonso <aalonso00@gmail.com>
 
+
+List of supported machines
+--------------------------
+
+01. Xilinx ZC702
+
+This layer adds support for graphical login using the Xylon FB using the bitstream
+from the Zynq ZC702 Base TRD 14.5 (v2013.1).
+
+02. Xilinx ZC706
+
+This layer adds support for graphical login using the Xylon FB using the bitstream
+from the Zynq ZC706 PCIe TRD 14.7 Technical Reference Design (TRD).
+
+03. Avnet MicroZed
+
+This layer adds community support for the Avnet MicroZed board, contributed by
+David Andrey.
+
+04. NetModule ZE7000
+
+This layer adds community support for the NetModule ZE7000 machine, contributed by
+Stefan Eichenberger.
+
+
 Contributing
 ------------
 
@@ -22,8 +51,9 @@ To contribute to this layer you should send patches for review to the
 mailing list.
 
 Mailing list: yocto@yoctoproject.org
-Use "[meta-xilinx]" as subject prefix
-Source code: git://git.yoctoproject.org/meta-xilinx
+Use "[meta-xilinx-community]" as subject prefix
+Source code: git://git.yoctoproject.org/meta-xilinx-community
 
 When sending patches, please use something like:
-git send-email --to yocto@yoctoproject.org --subject-prefix='meta-xilinx][PATCH']'
+git send-email --to yocto@yoctoproject.org --subject-prefix='[meta-xilinx-community][PATCH]'
+
