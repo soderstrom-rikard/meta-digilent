@@ -1,22 +1,21 @@
-From 5d0a0937be405d223a680b3cf48f2df375dd65c8 Mon Sep 17 00:00:00 2001
-From: Marcel Reichmuth <marcel.reichmuth@netmodule.com>
-Date: Fri, 4 Oct 2013 09:53:47 +0200
-Subject: [PATCH 7/9] kernel: sdhci: add sd card support
+From b4712e0b848ab662a57cbf8dc8ffd5053c3e6ef5 Mon Sep 17 00:00:00 2001
+From: David Andrey <david.andrey@netmodule.com>
+Date: Tue, 1 Jul 2014 09:38:12 +0200
+Subject: [PATCH 4/7] zx3: sdhci: add sd card support
 
-Conflicts:
-	arch/arm/boot/dts/zx3-pm3.dts
-	arch/arm/configs/zx3_pm3_defconfig
+Disable the card detect for the ZX3 module as not
+supported and avoid correct initialization
 
 Signed-off-by: Marcel Reichmuth <marcel.reichmuth@netmodule.com>
 ---
- drivers/mmc/host/sdhci.c |   34 ++++++++++++++++------------------
- 1 file changed, 16 insertions(+), 18 deletions(-)
+ drivers/mmc/host/sdhci.c |   32 +++++++++++++++-----------------
+ 1 file changed, 15 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
-index 6f0bfc0..8909695 100644
+index 9ddef47..72e8bfc 100644
 --- a/drivers/mmc/host/sdhci.c
 +++ b/drivers/mmc/host/sdhci.c
-@@ -973,9 +973,20 @@ static void sdhci_send_command(struct sdhci_host *host, struct mmc_command *cmd)
+@@ -990,9 +990,20 @@ void sdhci_send_command(struct sdhci_host *host, struct mmc_command *cmd)
 	int flags;
 	u32 mask;
 	unsigned long timeout;
@@ -37,7 +36,7 @@ index 6f0bfc0..8909695 100644
 	/* Wait max 10 ms */
 	timeout = 10;
 
-@@ -1517,24 +1528,11 @@ static void sdhci_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
+@@ -1648,24 +1659,11 @@ static int sdhci_get_cd(struct mmc_host *mmc)
 
  static int sdhci_check_ro(struct sdhci_host *host)
  {
@@ -55,14 +54,13 @@ index 6f0bfc0..8909695 100644
 -				& SDHCI_WRITE_PROTECT);
 -
 -	spin_unlock_irqrestore(&host->lock, flags);
--
--	/* This quirk needs to be replaced by a callback-function later */
--	return host->quirks & SDHCI_QUIRK_INVERTED_WRITE_PROTECT ?
--		!is_readonly : is_readonly;
 +	/*
 +	Write protect is not supported, so allways return false.
 +	*/
-+
+
+-	/* This quirk needs to be replaced by a callback-function later */
+-	return host->quirks & SDHCI_QUIRK_INVERTED_WRITE_PROTECT ?
+-		!is_readonly : is_readonly;
 +	return 0;
  }
 

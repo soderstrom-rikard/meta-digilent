@@ -1,7 +1,7 @@
-From e38e5682093f0ddfb50ed6c7a17d4842ac7ccd3f Mon Sep 17 00:00:00 2001
+From b266e1a7ff8073d0437fcafc51ba5f97bf523fc5 Mon Sep 17 00:00:00 2001
 From: David Andrey <david.andrey@netmodule.com>
-Date: Mon, 22 Jul 2013 16:36:27 +0200
-Subject: [PATCH 2/9] ze7000: phy: adapt marvell settings
+Date: Fri, 27 Jun 2014 11:39:31 +0200
+Subject: [PATCH 2/7] zx3: phy: adapt marvell settings
 
 The onboard PHY is compatible with the 88E1116R,
 based on the UID at least
@@ -9,18 +9,15 @@ Marvell settings are overwritten to met the board
 requirements
 
 Signed-off-by: David Andrey <david.andrey@netmodule.com>
-
-Conflicts:
-	arch/arm/boot/dts/ze7000.dts
 ---
  drivers/net/phy/marvell.c |   19 ++++++++++++++++++-
  1 file changed, 18 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/phy/marvell.c b/drivers/net/phy/marvell.c
-index 7a7aad1..0d8a6e6 100644
+index bd37e45..d36686a 100644
 --- a/drivers/net/phy/marvell.c
 +++ b/drivers/net/phy/marvell.c
-@@ -390,11 +390,28 @@ static int m88e1116r_config_init(struct phy_device *phydev)
+@@ -414,11 +414,28 @@ static int m88e1116r_config_init(struct phy_device *phydev)
 	if (err < 0)
 		return err;
 	temp = phy_read(phydev, MII_M1116R_CONTROL_REG_MAC);

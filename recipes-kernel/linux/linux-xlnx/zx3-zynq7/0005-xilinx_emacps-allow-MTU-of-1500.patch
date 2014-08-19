@@ -1,8 +1,9 @@
-From ee45201008c4214e6ed956d4e5a7bf157b3320c5 Mon Sep 17 00:00:00 2001
-From: Stefan Eichenberger <stefan.eichenberger@netmodule.com>
-Date: Wed, 13 Nov 2013 11:04:36 +0100
-Subject: [PATCH 8/9] [xilinx_emacps] Changed change_mtu so that it is
- possible to set an MTU of 1500.
+From b416616d5767a0547e917f8b5408199e08eda7e4 Mon Sep 17 00:00:00 2001
+From: David Andrey <david.andrey@netmodule.com>
+Date: Tue, 1 Jul 2014 09:44:51 +0200
+Subject: [PATCH 5/7] xilinx_emacps: allow MTU of 1500
+
+It is now possible to set an MTU of 1500.
 
 Signed-off-by: Stefan Eichenberger <stefan.eichenberger@netmodule.com>
 ---
@@ -10,10 +11,10 @@ Signed-off-by: Stefan Eichenberger <stefan.eichenberger@netmodule.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/net/ethernet/xilinx/xilinx_emacps.c b/drivers/net/ethernet/xilinx/xilinx_emacps.c
-index e66b87d..1e611ed 100644
+index aba7747..a08be55 100644
 --- a/drivers/net/ethernet/xilinx/xilinx_emacps.c
 +++ b/drivers/net/ethernet/xilinx/xilinx_emacps.c
-@@ -2295,7 +2295,7 @@ static void xemacps_set_rx_mode(struct net_device *ndev)
+@@ -2482,7 +2482,7 @@ static void xemacps_set_rx_mode(struct net_device *ndev)
  static int xemacps_change_mtu(struct net_device *ndev, int new_mtu)
  {
 	if ((new_mtu < MIN_MTU) ||
