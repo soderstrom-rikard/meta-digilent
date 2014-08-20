@@ -1,0 +1,100 @@
+/dts-v1/;
+/include/ "zynq7-base.dtsi"
+/ {
+	model = "Enclustra Mars PM3 ZX3";
+
+	chosen {
+		bootargs = "console=ttyPS0,115200 earlyprintk";
+		linux,stdout-path = &ps7_uart_1;
+	} ;
+
+	ps7_ddr_0: memory@0 {
+		device_type = "memory";
+		reg = < 0x0 0x20000000 >;  /* 512 MB */
+	} ;
+
+	ps7_axi_interconnect_0: amba@0 {
+
+		ps7_smc_0: smc@0xe000e000 {
+			#address-cells = <1>;
+			#size-cells = <1>;
+			arm,addr25 = <0x0>;
+			arm,nor-chip-sel0 = <0x0>;
+			arm,nor-chip-sel1 = <0x0>;
+			arm,sram-chip-sel0 = <0x0>;
+			arm,sram-chip-sel1 = <0x0>;
+			clock-names = "memclk", "aclk";
+			clocks = <&clkc 11>, <&clkc 44>;
+			compatible = "arm,pl353-smc-r2p1";
+			interrupt-parent = <&ps7_scugic_0>;
+			interrupts = <0 18 4>;
+			ranges ;
+			reg = <0xe000e000 0x1000>;
+			ps7_nand_0: ps7-nand@e1000000 {
+				compatible = "arm,pl353-nand-r2p1";
+				reg = <0xe1000000 0x1000000>;
+				/* timings in smc cycles count */
+				arm,nand-cycle-t0 = <3>; /* tRC */
+				arm,nand-cycle-t1 = <3>; /* tWC */
+				arm,nand-cycle-t2 = <1>; /* tREA */
+				arm,nand-cycle-t3 = <2>; /* tWP */
+				arm,nand-cycle-t4 = <2>; /* tCLR */
+				arm,nand-cycle-t5 = <2>; /* tAR */
+				arm,nand-cycle-t6 = <3>; /* tRR */
+				#address-cells = <0x1>;
+				#size-cells = <0x1>;
+
+				partition@nand-linux {
+					label = "nand-linux";
+					reg = <0x0 0x500000>;
+				};
+
+				partition@nand-device-tree {
+					label = "nand-device-tree";
+					reg = <0x500000 0x100000>;
+				};
+
+				partition@nand-rootfs {
+					label = "nand-rootfs";
+					reg = <0x600000 0x000000>;
+				};
+			};
+		} ;
+
+		ps7_ethernet_0: ps7-ethernet@e000b000 {
+			phy-handle = <&phy0>;
+			phy-mode = "rgmii-id";
+			mdio {
+				phy0: phy@3 {
+					compatible = "micrel,ksz9031";
+					device_type = "ethernet-phy";
+					reg = <0x3>;
+				};
+			} ;
+		} ;
+
+		ps7_i2c_0: ps7-i2c@e0004000 {
+
+			rtc@6F {
+				compatible = "isl12022";
+				reg = <0x6F>;
+			} ;
+		} ;
+
+		/* Disabled Devices */
+		ps7_uart_0: serial@e0000000  { compatible = "invalid"; };
+		ps7_sd_0: ps7-sdio@e0100000  { compatible = "invalid"; };
+		ps7_sd_1: ps7-sdio@e0101000  { compatible = "invalid"; };
+		ps7_wdt_0: ps7-wdt@f8005000  { compatible = "invalid"; };
+		ps7_can_0: ps7-can@e0008000  { compatible = "invalid"; };
+		ps7_can_1: ps7-can@e0009000  { compatible = "invalid"; };
+		ps7_usb_1: ps7-usb@e0003000  { compatible = "invalid"; };
+		ps7_dma_ns: ps7-dma@f8004000 { compatible =" invalid"; };
+		ps7_i2c_1: ps7-i2c@e0005000  { compatible = "invalid"; };
+		ps7_ethernet_1: ps7-ethernet@e000c000 { compatible = "invalid"; };
+		ps7_qspi_0: ps7-qspi@e000d000 { compatible = "invalid"; };
+		ps7_qspi_linear_0: ps7-qspi-linear@fc000000 { compatible = "invalid"; };
+		ps7_spi_0: ps7-spi@e0006000  { compatible = "invalid"; };
+		ps7_spi_1: ps7-spi@e0007000  { compatible = "invalid"; };
+	} ;
+} ;
