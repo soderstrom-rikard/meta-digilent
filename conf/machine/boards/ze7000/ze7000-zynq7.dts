@@ -78,19 +78,6 @@
 		} ;
 
 		ps7_ethernet_1: ps7-ethernet@e000c000 {
-			#address-cells = <1>;
-			#size-cells = <0>;
-			clock-names = "ref_clk", "aper_clk", "pclk", "hclk", "tx_clk";
-			clocks = <&clkc 14>, <&clkc 31>, <&clkc 31>, <&clkc 31>, <&clkc 14>;
-			compatible = "cdns,gem", "xlnx,ps7-ethernet-1.00.a";
-			interrupt-parent = <&ps7_scugic_0>;
-			interrupts = <0 45 4>;
-			local-mac-address = [ 00 0a 35 00 00 01 ];
-			reg = <0xe000c000 0x1000>;
-			xlnx,enet-reset = <0xffffffff>;
-			xlnx,eth-mode = <0x1>;
-			xlnx,has-mdio = <0x1>;
-
 			phy-handle = <&phy1 &phy2 &phy3 &phy4>;
 			phy-mode = "";
 
@@ -130,10 +117,6 @@
 			gpio-mask-low = <0xfe81>;
 		} ;
 
-		ps7_qspi_linear_0: ps7-qspi-linear@fc000000 {
-			xlnx,qspi-clk-freq-hz = <0xe4e1c0>;
-		} ;
-
 		ps7_sd_0: ps7-sdio@e0100000 {
 			clock-frequency = <125000000>;
 			xlnx,sdio-clk-freq-hz = <0x3f93e10>;
@@ -161,5 +144,9 @@
 		ps7_usb_1: ps7-usb@e0003000 { compatible = "invalid"; };
 		ps7_dma_ns: ps7-dma@f8004000 { compatible =" invalid"; };
 		ps7_i2c_1: ps7-i2c@e0005000 { compatible = "invalid"; };
+		ps7_qspi_0: ps7-qspi@e000d000 { compatible = "invalid"; };
+		ps7_qspi_linear_0: ps7-qspi-linear@fc000000 { compatible = "invalid"; };
+		ps7_spi_0: ps7-spi@e0006000  { compatible = "invalid"; };
+		ps7_spi_1: ps7-spi@e0007000  { compatible = "invalid"; };
 	} ;
 } ;
