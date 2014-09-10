@@ -42,6 +42,13 @@ David Andrey.
 
 This layer adds community support for the NetModule ZE7000 machine, contributed by
 Stefan Eichenberger.
+Check github.com/netmodule/meta-ze7000 for additional support
+
+05. Enclustra ZX3-PM3
+
+This layer adds community support for the Enclustra PM3 evaluation board
+using a ZX3 CPU module. Contributed by David Andrey.
+Check github.com/enclustra/meta-enclustra for additional layer
 
 
 Contributing
