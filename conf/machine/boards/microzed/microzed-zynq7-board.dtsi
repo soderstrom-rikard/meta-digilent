@@ -1,9 +1,12 @@
-/include/ "zynq7-base.dtsi"
+/*
+ * microZed DTS for generic boot.
+ */
+
 / {
 	model = "microZed";
 
 	chosen {
-		bootargs = "console=ttyPS0,115200 earlyprintk";
+		bootargs = "console=ttyPS0,115200 earlyprintk root=/dev/ram rw";
 		linux,stdout-path = "/axi@0/serial@e0001000";
 	} ;
 
