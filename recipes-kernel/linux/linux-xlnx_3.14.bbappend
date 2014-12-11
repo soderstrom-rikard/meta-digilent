@@ -2,7 +2,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
 ### ZE7000 machine configuration ###
 KBRANCH_ze7000-zynq7 = "zx3-v3.14"
-SRCREV_ze7000-zynq7 = "337cea4c2b403192f2a147e953083e33167be395"
+SRCREV_ze7000-zynq7 = "${AUTOREV}"
 SRC_URI_ze7000-zynq7 = "git://github.com/netmodule/kernel-zx3.git;protocol=https;branch=${KBRANCH}"
 
 SRC_URI_append_ze7000-zynq7 = " \
